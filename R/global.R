@@ -31,7 +31,7 @@ global_query <- function(query, project_type = "all"){
   }
 
   #Run query
-  wikis <- mysql_query(query = info_query, db = "staging")$wiki
+  wikis <- mysql_read(query = info_query, db = "staging")$wiki
 
   #Instantiate progress bar and note environment
   env <- environment()
@@ -41,7 +41,7 @@ global_query <- function(query, project_type = "all"){
   data <- lapply(wikis, function(x, query){
 
     #Retrieve the data
-    data <- mysql_query(query = query, db = x)
+    data <- mysql_read(query = query, db = x)
 
     if(nrow(data) > 0){
 

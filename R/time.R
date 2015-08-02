@@ -15,7 +15,7 @@ from_mediawiki <- function(x){
 
 #'@rdname timeconverters
 #'@export
-from_requestlog <- function(x){
+from_log <- function(x){
   return(strptime(substr(iconv(x, to = "UTF-8"), 0, 19), format = "%Y-%m-%dT%H:%M:%S", tz = "UTC"))
 }
 
@@ -27,6 +27,6 @@ to_mediawiki <- function(x){
 
 #'@rdname timeconverters
 #'@export
-to_requestlog <- function(x){
+to_log <- function(x){
   gsub(x = x, pattern = " ", replacement = "T")
 }

@@ -1,10 +1,10 @@
 Package: wmf
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1
+Title: R Code for Wikimedia Foundation Internal Usage
+Version: 0.1.1
 Date: 2015-07-27
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
+Author: Oliver Keyes
+Maintainer: Oliver Keyes <oliver@wikimedia.org>
 Description: More about what it does (maybe more than one line)
 License: What license is it under?
 LazyData: TRUE

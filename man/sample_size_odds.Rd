@@ -4,32 +4,55 @@
 \alias{sample_size_odds}
 \title{calculate sample size given odds ratio}
 \usage{
-sample_size_odds(odds_ratio, precision = NULL, p_a = NULL,
-  conf_level = 0.95, sample_ratio = 1, visualize = FALSE)
+sample_size_odds(odds_ratio = NULL, p_control = NULL, p_treatment = NULL,
+  power = NULL, conf_level = 0.95, sample_ratio = 1, visualize = FALSE)
 }
 \arguments{
 \item{odds_ratio}{The expected odds ratio. That is, the ratio of the odds of
-the outcome in the test group (b) relative to the control group (a).}
+the outcome in the test group relative to the control group. Optional,
+but see \strong{Details}.}
 
-\item{precision}{Relative precision dictates your margin of error. Optional
-only if \code{pa} is provided.}
+\item{p_control}{Your guess for prevalence of outcome in the control group.
+Optional but see \strong{Details}.}
 
-\item{p_a}{Expected prevalence of outcome in the control group (a). Optional
-only if \code{precision} is provided.}
+\item{p_treatment}{Your guess for prevalence of outcome in the test group.
+Optional but see \strong{Details}.}
+
+\item{power}{The ability of the test to detect an effect where there is one.
+Power = 1 - Prob(Type 2 error). Optional. See \strong{Value} for details.}
 
 \item{conf_level}{Desired confidence level. Defaults to 95\%.}
 
 \item{sample_ratio}{Ratio of test group to control group. 1 is even split.}
 
-\item{visualize}{Whether to plot relative precision or prevalence of outcome
- in the control group vs sample size. Can be used to help make a decision.}
+\item{visualize}{Whether to plot power or prevalence of outcome in the
+ control group vs sample size. Can be used to help make a decision.}
 }
 \value{
-If \code{pa} was not provided, returns a data frame containing
- possible values of \eqn{\pi_a} and the appropriate sample size.
- If \code{pa} was provided, returns a single sample size estimate.
+If \code{power} was not provided, returns vector containing
+ possible power values and the appropriate sample size for each \%.
+ If all values were provided, returns a single sample size estimate.
 }
 \description{
 calculate sample size given odds ratio
+}
+\details{
+The function only needs to know two of the following three:
+\code{odds_ratio}, \code{p_control}, and \code{p_treatment}. If given
+all three, it will check to make sure the odds ratio is correct. It
+will figure out the missing third value from the other two.
+}
+\section{References}{
+
+Wang, H., Chow, S.-C., & Li, G. (2002). On sample size calculation based on
+ odds ratio in clinical trials. \emph{Journal of Biopharmaceutical
+ Statistics}, \strong{12}(4), 471–483.
+ \url{http://doi.org/10.1081/BIP-120016231}
+}
+\examples{
+sample_size_odds(p_treatment = 0.4, p_control = 0.25, power = 0.8)
+sample_size_odds(odds_ratio = 2, p_control = 0.4, power = c(0.8, 0.9, 0.95))
+sample_size_odds(odds_ratio = 2, p_control = 0.4)
+sample_size_odds(odds_ratio = 2, p_control = 0.4, visualize = TRUE)
 }
 

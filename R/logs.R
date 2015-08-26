@@ -34,21 +34,34 @@ get_logfile <- function(earliest = NULL, latest = NULL){
 #'@title read a sampled log file
 #'@description read a sampled log file identified with \code{\link{get_logfile}}.
 #'The sampled logs are returned as a data.frame with 16 columns - see
-#'the "Value" documentation.
+#'  the "Value" documentation.
 #'
 #'@param file a filename, retrieved with \code{\link{get_logfile}}
+#'@param transparent a logical flag whether to gunzip the log file explicitly
+#'  first (default) or read it in directly.
+#'@param nrows Number of rows to read in. (Optional)
 #'
 #'@return a data.frame containing 16 columns - "squid", "sequence_no", "timestamp",
-#'"servicetime", "ip_address", "status_code", "reply_size", "request_method",
-#'"url", "squid_status", "mime_type", "referer", "x_forwarded", "user_agent",
-#'"lang" and "x_analytics".
+#'  "servicetime", "ip_address", "status_code", "reply_size", "request_method",
+#'  "url", "squid_status", "mime_type", "referer", "x_forwarded", "user_agent",
+#'  "lang" and "x_analytics".
 #'
 #'@importFrom urltools url_decode
 #'@export
-read_sampled_log <- function(file){
-  output_file <- tempfile()
-  system(paste("gunzip -c", file, ">", output_file))
-  data <- read.delim(output_file, as.is = TRUE, quote = "",
+read_sampled_log <- function(file, transparent = FALSE, nrows = NULL){
+  is_gzipped <- grepl("gz$", file)
+  if ( is_gzipped ) { # gzipped log file
+    if ( transparent ) { # read the file in directly w/o gunzipping first
+      output_file <- file
+    } else {
+      output_file <- tempfile()
+      system(paste("gunzip -c", file, ">", output_file))
+    }
+  } else { # an already gunzipped log file
+    output_file <- file
+  }
+  if ( is.null(nrows) ) nrows = -1
+  data <- read.delim(outfile, as.is = TRUE, quote = "", nrows = nrows,
                      col.names = c("squid","sequence_no",
                                    "timestamp", "servicetime",
                                    "ip_address", "status_code",
@@ -57,7 +70,7 @@ read_sampled_log <- function(file){
                                    "mime_type", "referer",
                                    "x_forwarded", "user_agent",
                                    "lang", "x_analytics"))
-  file.remove(output_file)
+  if ( is_gzipped && !transparent ) file.remove(output_file)
   data$url <- urltools::url_decode(data$url)
   data$referer <- urltools::url_decode(data$referer)
   return(data)

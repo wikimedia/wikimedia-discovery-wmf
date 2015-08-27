@@ -1,10 +1,18 @@
 Package: wmf
 Type: Package
 Title: R Code for Wikimedia Foundation Internal Usage
-Version: 0.1.1
-Date: 2015-07-27
-Author: Oliver Keyes
-Maintainer: Oliver Keyes <oliver@wikimedia.org>
-Description: More about what it does (maybe more than one line)
+Version: 0.1.2
+Date: 2015-08-26
+Authors@R: c(
+  person("Oliver", "Keyes", email = "oliver@wikimedia.org", role = "cre"),
+  person("Mikhail", "Popov", email = "mpopov@wikimedia.org", role = "aut"))
+Description: More about what it does (maybe more than one line).
 License: What license is it under?
 LazyData: TRUE
+Imports: 
+  RMySQL,
+  urltools,
+  pwr
+URL: https://github.com/Ironholds/wmf
+BugReports: https://github.com/Ironholds/wmf/issues
+Suggests: testthat

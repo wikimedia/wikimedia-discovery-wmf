@@ -7,6 +7,7 @@ but "too scattered and not useful enough for people outside it" including:
 2. `global_query()` for querying all of our MySQL databases;
 3. `from_mediawiki` and `from_log` (and corresponding `to_*` functions) to convert between time formats, and;
 4. `hive_query` for hitting up our HDFS store.
+5. `sample_size_odds` and `sample_size_effect` for calculating sample size(s) given an odds ratio or effect size (Cohen's *w*).
 
 More functions as people need them.
 

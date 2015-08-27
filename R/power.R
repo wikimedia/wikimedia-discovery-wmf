@@ -50,14 +50,16 @@ sample_size_odds <- function(odds_ratio = NULL,
                              p_control = NULL,
                              p_treatment = NULL,
                              power = NULL, conf_level = 0.95,
-                             sample_ratio = 1, visualize = FALSE)
-{ # Checks
+                             sample_ratio = 1,
+                             visualize = FALSE) {
+  # Checks
   power_missing <- is.null(power)
   pC_missing <- is.null(p_control)
   pT_missing <- is.null(p_treatment)
   oR_missing <- is.null(odds_ratio)
-  if ( (oR_missing + pC_missing + pT_missing) > 1)
+  if ( (oR_missing + pC_missing + pT_missing) > 1) {
     stop("Only one of {odds_ratio, p_control, p_treatment} can be missing.")
+  }
 
   # Imputations (Part 1)
   if (power_missing) {
@@ -97,10 +99,8 @@ sample_size_odds <- function(odds_ratio = NULL,
   # Output
   if (power_missing || length(power) > 1) {
     names(n) <- sprintf("%.0f%%", power*100)
-    return(n)
-  } else {
-    return(n)
   }
+  return(n)
 
 }
 
@@ -126,8 +126,8 @@ sample_size_odds <- function(odds_ratio = NULL,
 #'@importFrom pwr pwr.chisq.test
 #'@export
 sample_size_effect <- function(w = NULL, groups = 2,
-                               sig_level = 0.05, power = 0.8)
-{ # Checks
+                               sig_level = 0.05, power = 0.8) {
+  # Checks
   w_missing <- is.null(w)
   if (!w_missing && w <= 0.01) stop("'w' must be > 0.01")
   if (power <= 0.1 || power > 1.0) stop("'power' must be in (0.1, 1]")
@@ -142,12 +142,11 @@ sample_size_effect <- function(w = NULL, groups = 2,
                           sig.level = sig_level, power = power)$N
     }))
     names(n) <- c("tiny", "small", "medium", "large")
-    return(n)
   } else {
     n <- ceiling(pwr::pwr.chisq.test(w = w, N = NULL, df = groups - 1,
                                      sig.level = sig_level, power = power)$N)
-    return(n)
   }
+  return(n)
 }
 
 

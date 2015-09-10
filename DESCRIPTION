@@ -9,10 +9,12 @@ Authors@R: c(
 Description: More about what it does (maybe more than one line).
 License: What license is it under?
 LazyData: TRUE
-Imports: 
+Imports:
   RMySQL,
   urltools,
-  pwr
+  pwr,
+  ggplot2,
+  ggthemes
 URL: https://github.com/Ironholds/wmf
 BugReports: https://github.com/Ironholds/wmf/issues
 Suggests: testthat

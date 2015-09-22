@@ -2,30 +2,43 @@
 % Please edit documentation in R/mysql.R
 \name{mysql}
 \alias{mysql}
+\alias{mysql_close}
+\alias{mysql_connect}
+\alias{mysql_disconnect}
 \alias{mysql_exists}
 \alias{mysql_read}
 \alias{mysql_write}
-\title{query MySQL databases}
+\title{Work with MySQL databases}
 \usage{
-mysql_read(query, database)
+mysql_connect(database)
 
-mysql_exists(database, table_name)
+mysql_read(query, database, con = NULL)
 
-mysql_write(x, database, table_name, ...)
+mysql_exists(database, table_name, con = NULL)
+
+mysql_write(x, database, table_name, con = NULL, ...)
+
+mysql_close(con)
+
+mysql_disconnect(con)
 }
 \arguments{
-\item{query}{a SQL query.}
+\item{database}{The name of the database to query.}
 
-\item{database}{the name of the database to query.}
+\item{query}{A SQL query.}
 
-\item{...}{further arguments to pass to dbWriteTable. See ?dbWriteTable for more details.}
+\item{con}{A MySQL connection returned by \code{mysql_connect}.
+ Optional -- if not provided, a temporary connection will be opened up.}
 
-\item{table}{the name of a table to check for the existence of or create, depending on the
-function.}
+\item{...}{Further arguments to pass to dbWriteTable. See ?dbWriteTable for more details.}
+
+\item{table}{The name of a table to check for the existence of or create,
+ depending on the function.}
 }
 \description{
-read from, write to, and check data from the MySQL databases and tables in the Wikimedia
-cluster. Assumes the presence of a validly formatted .my.cnf.
+Read from, write to, and check data from the MySQL databases and
+ tables in the Wikimedia cluster. Assumes the presence of a validly
+ formatted configuration file.
 }
 \seealso{
 \code{\link{hive_query}} or \code{\link{global_query}}

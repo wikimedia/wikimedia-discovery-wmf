@@ -1,69 +1,118 @@
-#'@title query MySQL databases
-#'@description read from, write to, and check data from the MySQL databases and tables in the Wikimedia
-#'cluster. Assumes the presence of a validly formatted .my.cnf.
+RMySQL_version <- function() {
+  # Returns 93 if the installed version of RMySQL is 0.9.3
+  return(as.numeric(paste0(unlist(packageVersion("RMySQL")), collapse = "")))
+}
+
+#'@title Work with MySQL databases
+#'@description Read from, write to, and check data from the MySQL databases and
+#'  tables in the Wikimedia cluster. Assumes the presence of a validly
+#'  formatted configuration file.
 #'
-#'@param query a SQL query.
+#'@param query A SQL query.
 #'
-#'@param database the name of the database to query.
+#'@param database The name of the database to query.
 #'
-#'@param table the name of a table to check for the existence of or create, depending on the
-#'function.
+#'@param con A MySQL connection returned by \code{mysql_connect}.
+#'  Optional -- if not provided, a temporary connection will be opened up.
 #'
-#'@param ... further arguments to pass to dbWriteTable. See ?dbWriteTable for more details.
+#'@param table The name of a table to check for the existence of or create,
+#'  depending on the function.
+#'
+#'@param ... Further arguments to pass to dbWriteTable. See ?dbWriteTable for more details.
 #'
 #'@name mysql
 #'@rdname mysql
-#'@importMethodsFrom RMySQL dbConnect dbSendQuery dbDisconnect dbListResults dbClearResult fetch
+#'@importMethodsFrom RMySQL dbConnect
 #'
 #'@seealso \code{\link{hive_query}} or \code{\link{global_query}}
 #'
 #'@export
-mysql_read <- function(query, database){
-  con <- dbConnect(drv = "MySQL",
-                   host = "analytics-store.eqiad.wmnet",
-                   dbname = database,
-                   default.file = "/etc/mysql/conf.d/analytics-research-client.cnf")
+mysql_connect <- function(database) {
+  if (RMySQL_version() > 93) {
+    con <- dbConnect(drv = RMySQL::MySQL(),
+                             host = "analytics-store.eqiad.wmnet",
+                             dbname = database,
+                             default.file = "/etc/mysql/conf.d/analytics-research-client.cnf")
+  } else { # Using version RMySQL 0.9.3 or older:
+    con <- dbConnect(drv = "MySQL",
+                             host = "analytics-store.eqiad.wmnet",
+                             dbname = database,
+                             default.file = "/etc/mysql/conf.d/analytics-research-client.cnf")
+  }
+  return(con)
+}
+
+#'@rdname mysql
+#'@importMethodsFrom RMySQL dbSendQuery dbDisconnect dbListResults dbClearResult fetch
+#'@export
+mysql_read <- function(query, database, con = NULL) {
+  already_connected <- !is.null(con)
+  if (!already_connected) {
+    #Open a temporary connection to the db
+    con <- mysql_connect(database)
+  }
   to_fetch <- dbSendQuery(con, query)
   data <- fetch(to_fetch, -1)
+  message(sprintf("Fetched %.0f rows and %.0f columns.", nrow(data), ncol(data)))
   dbClearResult(dbListResults(con)[[1]])
-  dbDisconnect(con)
+  if (!already_connected) {
+    #Close temporary connection
+    dbDisconnect(con)
+  }
   return(data)
 }
 
 #'@rdname mysql
-#'@importMethodsFrom RMySQL dbExistsTable
+#'@importMethodsFrom RMySQL dbExistsTable dbDisconnect
 #'@export
-mysql_exists <- function(database, table_name){
-  #Create a connector
-  con <- dbConnect(drv = "MySQL",
-                   host = "analytics-store.eqiad.wmnet",
-                   dbname = database,
-                   default.file = "/etc/mysql/conf.d/analytics-research-client.cnf")
+mysql_exists <- function(database, table_name, con = NULL) {
+  already_connected <- !is.null(con)
+  if (!already_connected) {
+    #Open a temporary connection to the db
+    con <- mysql_connect(database)
+  }
   #Grab the results and close off
   table_exists <- dbExistsTable(conn = con, name = table_name)
-  dbDisconnect(con)
+  if (!already_connected) {
+    #Close temporary connection
+    dbDisconnect(con)
+  }
   #Return
   return(table_exists)
 }
 
-
 #'@rdname mysql
-#'@importMethodsFrom RMySQL dbWriteTable
+#'@importMethodsFrom RMySQL dbWriteTable dbDisconnect
 #'@export
-mysql_write <- function(x, database, table_name, ...){
-  #Open a connection to the db
-  con <- dbConnect(drv = "MySQL",
-                   host = "analytics-store.eqiad.wmnet",
-                   dbname = database,
-                   default.file = "/etc/mysql/conf.d/analytics-research-client.cnf")
+mysql_write <- function(x, database, table_name, con = NULL, ...){
+  already_connected <- !is.null(con)
+  if (!already_connected) {
+    #Open a temporary connection to the db
+    con <- mysql_connect(database)
+  }
   #Write
   result <- dbWriteTable(conn = con,
                          name = table_name,
                          value = x,
                          row.names = FALSE,
                          ...)
-  #Close connection
-  dbDisconnect(con)
+  if (!already_connected) {
+    #Close temporary connection
+    dbDisconnect(con)
+  }
   #Return the success/failure
   return(result)
+}
+
+#'@rdname mysql
+#'@importMethodsFrom RMySQL dbDisconnect
+#'@export
+mysql_close <- function(con) {
+  dbDisconnect(con)
+  return(invisible())
+}
+#'@rdname mysql
+#'@export
+mysql_disconnect <- function(con) {
+  mysql_close(con)
 }

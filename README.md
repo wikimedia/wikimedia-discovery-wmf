@@ -1,4 +1,4 @@
-## Internal tools for WMF data analysts
+# Internal tools for WMF data analysts
 
 A lot of code is generalisable. Some code is not. This package contains functions generalisable to "people at the Wikimedia Foundation"
 but "too scattered and not useful enough for people outside it" including:
@@ -11,9 +11,10 @@ but "too scattered and not useful enough for people outside it" including:
 
 More functions as people need them.
 
-### Installation
+Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
+
+## Installation
 
 ```
-    devtools::install_github("ironholds/wmf")
-    
+devtools::install_github("ironholds/wmf")
 ```

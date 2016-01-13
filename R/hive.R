@@ -39,6 +39,8 @@
 #'@export
 hive_query <- function(query, file = NULL, ...){
 
+  to_R <- FALSE
+  
   #If the user wants it passed straight to R...
   if(is.null(file)){
 

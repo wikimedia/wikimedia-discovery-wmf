@@ -3,15 +3,7 @@
 #'@description this is the "old" hive querying function - it's deprecated as all hell and waiting
 #'until Andrew sticks the hive server on a dedicated and more powerful machine.
 #'
-#'@param query a query, or the location of a .hql file containing a query.
-#'
-#'@param file a file name. If this is provided, the results of the query will be written straight
-#'there, and a boolean TRUE returned. If not provided (it's NULL by default), the results of the query
-#'will be returned as a data.frame
-#'
-#'@param dt Whether to return it as a data.table or not.
-#'
-#'@param ... other arguments to pass to read.delim.
+#'@param query a Hive query
 #'
 #'@section escaping:
 #'\code{hive_query} works by running the query you provide through the CLI via a system() call.
@@ -36,40 +28,53 @@
 #'@seealso \code{\link{log_strptime}} for converting the "dt" column in the webrequests table to POSIXlt,
 #'and \code{\link{mysql_query}} and \code{\link{global_query}} for querying our MySQL databases.
 #'
+#'@examples
+#'\dontrun{
+#'query_hive("USE wmf; DESCRIBE webrequest;")
+#'}
+#'
 #'@export
-hive_query <- function(query, file = NULL, ...){
+query_hive <- function(query){
 
-  to_R <- FALSE
-  
-  #If the user wants it passed straight to R...
-  if(is.null(file)){
+    # Write query out to tempfile and create tempfile for results.
+    query_dump <- tempfile()
+    cat(query, file = query_dump)
+    results_dump <- tempfile()
 
-    #Create temp file
-    file <- tempfile(pattern = "file", fileext = ".tsv")
+    # Query and read in the results
+    try({
+      system(paste0("export HADOOP_HEAPSIZE=1024 && hive -S -f ", query_dump, " > ", results_dump))
+      results <- read.delim(results_dump, sep = "\t", quote = "", as.is = TRUE, header = TRUE)
+    })
 
-    #Note
-    to_R <- TRUE
+    # Clean up and return
+    file.remove(query_dump, results_dump)
+    stop_on_empty(results)
+    return(results)
 
+}
+
+#'@title Generate a Date Clause for a Hive query
+#'@description what it says on the tin; generates a "WHERE year = foo AND month = bar" using lubridate
+#'that can then be combined with other elements to form a Hive query.
+#'
+#'@param date the date to use. If NULL, yesterday will be used.
+#'
+#'@return a list containing two elements, "date_clause" and "date"; the returning of
+#'the date allows you to include it with.
+#'
+#'@export
+date_clause <- function(date) {
+  if (is.null(date)) {
+    date <- Sys.Date() - 1
   }
 
-  #Run query. If the query is /not/ a file, make it one
-  if(!grepl(x = query, pattern = "\\.hql$")){
-    query_file <- tempfile(fileext = ".hql")
-    cat(query, file = query_file)
-    query <- query_file
-  }
+  split_date <- unlist(strsplit(as.character(date), "-"))
 
-  #Run
-  system(paste("export HADOOP_HEAPSIZE=1024 && hive -f", query, ">", file))
+  fragment <- (paste("WHERE year =", split_date[1],
+                     "AND month =",split_date[2],
+                     "AND day =", split_date[3], " "))
 
-  #Read, remove the file and return(if appropriate)
-  if(to_R){
-    data <- read.delim(file = file, header = TRUE, as.is = TRUE, quote = "", ...)
-    file.remove(file)
-    return(data)
-  }
-  return(TRUE)
-
-
-
+  output <- list(date_clause = fragment, date = date)
+  return(output)
 }

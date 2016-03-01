@@ -10,11 +10,13 @@ Description: More about what it does (maybe more than one line).
 License: What license is it under?
 LazyData: TRUE
 Imports:
-  RMySQL,
-  urltools,
-  pwr,
-  ggplot2,
-  ggthemes
+    RMySQL,
+    urltools,
+    pwr,
+    ggplot2,
+    ggthemes
 URL: https://github.com/Ironholds/wmf
 BugReports: https://github.com/Ironholds/wmf/issues
-Suggests: testthat
+Suggests:
+    testthat
+RoxygenNote: 5.0.1

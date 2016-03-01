@@ -3,6 +3,15 @@ RMySQL_version <- function() {
   return(as.numeric(paste0(unlist(packageVersion("RMySQL")), collapse = "")))
 }
 
+# Ensure that we recognise and error on 0 rows
+stop_on_empty <- function(data){
+  if(nrow(data) == 0){
+    stop("No rows were returned from the database")
+  }
+  return(invisible())
+}
+
+
 #'@title Work with MySQL databases
 #'@description Read from, write to, and check data from the MySQL databases and
 #'  tables in the Wikimedia cluster. Assumes the presence of a validly
@@ -59,6 +68,7 @@ mysql_read <- function(query, database, con = NULL) {
     #Close temporary connection
     dbDisconnect(con)
   }
+  stop_on_empty(data)
   return(data)
 }
 

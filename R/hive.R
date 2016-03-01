@@ -73,7 +73,7 @@ date_clause <- function(date) {
 
   fragment <- (paste("WHERE year =", split_date[1],
                      "AND month =",split_date[2],
-                     "AND day =", split_date[3], " "))
+                     "AND day =", split_date[3], ""))
 
   output <- list(date_clause = fragment, date = date)
   return(output)

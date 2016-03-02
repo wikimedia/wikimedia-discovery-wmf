@@ -126,3 +126,33 @@ mysql_close <- function(con) {
 mysql_disconnect <- function(con) {
   mysql_close(con)
 }
+
+#'@title Builds a MySQL query aimed at the EventLogging-centric formats
+#'@description constructs a MySQL query with a conditional around date.
+#'This is aimed at eventlogging, where the date/time is always "timestamp".
+#'
+#'@param fields the SELECT statement.
+#'
+#'@param table the table to use.
+#'
+#'@param date the date to restrict to. If NULL, yesterday will be used.
+#'
+#'@param any other conditionals to include in the WHERE statement.
+#'
+#'@export
+build_query <- function(fields, table, date = NULL, conditionals = NULL){
+
+  # Ensure we have a date and deconstruct it into a MW-friendly format
+  if (is.null(date)) {
+    date <- Sys.Date() - 1
+  }
+  date <- gsub(x = date, pattern = "-", replacement = "")
+
+  # Build the query proper (this will work for EL schemas where the field is always 'timestamp')
+  query <- paste(fields, "FROM", table, "WHERE LEFT(timestamp,8) =", date,
+                 ifelse(is.null(conditionals), "", "AND"), conditionals)
+
+  results <- mysql_read(query, "log")
+  stop_on_empty(results)
+  return(results)
+}

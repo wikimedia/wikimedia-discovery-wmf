@@ -14,6 +14,7 @@ Imports:
     urltools,
     pwr,
     ggplot2,
+    readr,
     ggthemes
 URL: https://github.com/Ironholds/wmf
 BugReports: https://github.com/Ironholds/wmf/issues

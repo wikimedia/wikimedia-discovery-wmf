@@ -1,0 +1,6 @@
+[gerrit]
+host=gerrit.wikimedia.org
+port=29418
+project=wikimedia/discovery/wmf.git
+defaultbranch=master
+defaultrebase=0

@@ -4,10 +4,17 @@
 \alias{query_hive}
 \title{hive_query}
 \usage{
-query_hive(query)
+query_hive(query, override_jars = FALSE)
 }
 \arguments{
 \item{query}{a Hive query}
+
+\item{override_jars}{A logical flag indicating whether to override the path.
+Hive on WMF's analytics machine(s) loads some JARs by default, so if your
+query uses an updated version of an existing UDF and you want to load the
+JAR that you built yourself, set this to TRUE. See
+\href{https://wikitech.wikimedia.org/wiki/Analytics/Cluster/Hive/QueryUsingUDF#Testing_changes_to_existing_udf}{this section}
+for more details.}
 }
 \value{
 a data.frame containing the results of the query, or a boolean TRUE if the user has chosen

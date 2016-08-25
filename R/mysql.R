@@ -36,17 +36,19 @@ stop_on_empty <- function(data){
 #'@seealso \code{\link{hive_query}} or \code{\link{global_query}}
 #'
 #'@export
-mysql_connect <- function(database) {
+mysql_connect <- function(database, default_file = NULL) {
+  if (is.null(default_file)) {
+    default_file = "/etc/mysql/conf.d/stats-research-client.cnf"
+    # there's also "/etc/mysql/conf.d/analytics-research-client.cnf"
+  }
   if (RMySQL_version() > 93) {
     con <- dbConnect(drv = RMySQL::MySQL(),
-                             host = "analytics-store.eqiad.wmnet",
-                             dbname = database,
-                             default.file = "/etc/mysql/conf.d/analytics-research-client.cnf")
+                     host = "analytics-store.eqiad.wmnet",
+                     dbname = database, default.file = default_file)
   } else { # Using version RMySQL 0.9.3 or older:
     con <- dbConnect(drv = "MySQL",
-                             host = "analytics-store.eqiad.wmnet",
-                             dbname = database,
-                             default.file = "/etc/mysql/conf.d/analytics-research-client.cnf")
+                     host = "analytics-store.eqiad.wmnet",
+                     dbname = database, default.file = default_file)
   }
   return(con)
 }
@@ -57,7 +59,7 @@ mysql_connect <- function(database) {
 mysql_read <- function(query, database, con = NULL) {
   already_connected <- !is.null(con)
   if (!already_connected) {
-    #Open a temporary connection to the db
+    # Open a temporary connection to the db:
     con <- mysql_connect(database)
   }
   to_fetch <- dbSendQuery(con, query)
@@ -65,8 +67,8 @@ mysql_read <- function(query, database, con = NULL) {
   message(sprintf("Fetched %.0f rows and %.0f columns.", nrow(data), ncol(data)))
   dbClearResult(dbListResults(con)[[1]])
   if (!already_connected) {
-    #Close temporary connection
-    dbDisconnect(con)
+    # Close temporary connection:
+    mysql_close(con)
   }
   stop_on_empty(data)
   return(data)
@@ -78,14 +80,14 @@ mysql_read <- function(query, database, con = NULL) {
 mysql_exists <- function(database, table_name, con = NULL) {
   already_connected <- !is.null(con)
   if (!already_connected) {
-    #Open a temporary connection to the db
+    # Open a temporary connection to the db:
     con <- mysql_connect(database)
   }
-  #Grab the results and close off
+  # Grab the results and close off:
   table_exists <- dbExistsTable(conn = con, name = table_name)
   if (!already_connected) {
-    #Close temporary connection
-    dbDisconnect(con)
+    # Close temporary connection:
+    mysql_close(con)
   }
   #Return
   return(table_exists)
@@ -97,20 +99,20 @@ mysql_exists <- function(database, table_name, con = NULL) {
 mysql_write <- function(x, database, table_name, con = NULL, ...){
   already_connected <- !is.null(con)
   if (!already_connected) {
-    #Open a temporary connection to the db
+    # Open a temporary connection to the db:
     con <- mysql_connect(database)
   }
-  #Write
+  # Write:
   result <- dbWriteTable(conn = con,
                          name = table_name,
                          value = x,
                          row.names = FALSE,
                          ...)
   if (!already_connected) {
-    #Close temporary connection
-    dbDisconnect(con)
+    # Close temporary connection:
+    mysql_close(con)
   }
-  #Return the success/failure
+  # Return the success/failure:
   return(result)
 }
 

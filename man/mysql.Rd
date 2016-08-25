@@ -10,7 +10,7 @@
 \alias{mysql_write}
 \title{Work with MySQL databases}
 \usage{
-mysql_connect(database)
+mysql_connect(database, default_file = NULL)
 
 mysql_read(query, database, con = NULL)
 

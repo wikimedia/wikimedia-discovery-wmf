@@ -14,11 +14,16 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 
 ## Installation
 
-```
-devtools::install_github("wikimedia-research/wmf")
+```R
+# install.packages("devtools")
+
+devtools::install_git("https://gerrit.wikimedia.org/r/wikimedia/discovery/wmf")
+
+# Alternatively, you can install from the GitHub mirror of WMF's Gerrit repos:
+devtools::install_github("wikimedia/wikimedia-discovery-wmf")
 ```
 
 ## Maintainers
 
-- [Oliver Keyes](https://meta.wikimedia.org/wiki/User:Okeyes_(WMF))
 - [Mikhail Popov](https://meta.wikimedia.org/wiki/User:MPopov_(WMF))
+- [Chelsy Xie](https://meta.wikimedia.org/wiki/User:CXie_(WMF))

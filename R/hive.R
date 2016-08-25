@@ -4,6 +4,12 @@
 #'until Andrew sticks the hive server on a dedicated and more powerful machine.
 #'
 #'@param query a Hive query
+#'@param override_jars A logical flag indicating whether to override the path.
+#'  Hive on WMF's analytics machine(s) loads some JARs by default, so if your
+#'  query uses an updated version of an existing UDF and you want to load the
+#'  JAR that you built yourself, set this to TRUE. See
+#'  \href{https://wikitech.wikimedia.org/wiki/Analytics/Cluster/Hive/QueryUsingUDF#Testing_changes_to_existing_udf}{this section}
+#'  for more details.
 #'
 #'@section escaping:
 #'\code{hive_query} works by running the query you provide through the CLI via a system() call.
@@ -34,7 +40,7 @@
 #'}
 #'
 #'@export
-query_hive <- function(query){
+query_hive <- function(query, override_jars = FALSE) {
 
     # Write query out to tempfile and create tempfile for results.
     query_dump <- tempfile()
@@ -43,7 +49,9 @@ query_hive <- function(query){
 
     # Query and read in the results
     try({
-      system(paste0("export HADOOP_HEAPSIZE=1024 && hive -S -f ", query_dump, " > ", results_dump))
+      system(paste0("export HADOOP_HEAPSIZE=1024 && hive -S ",
+                    ifelse(override_jars, "--hiveconf hive.aux.jars.path=", ""),
+                    " -f ", query_dump, " > ", results_dump))
       results <- read.delim(results_dump, sep = "\t", quote = "", as.is = TRUE, header = TRUE)
     })
 

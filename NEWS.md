@@ -1,3 +1,9 @@
+wmf 0.2.2
+=============
+* Updates `query_hive()` to support [JAR path overriding](https://wikitech.wikimedia.org/wiki/Analytics/Cluster/Hive/QueryUsingUDF#Testing_changes_to_existing_udf)
+* Updates the MySQL config file path so the package can now also be used on stat1003
+* Updates maintainer contact info in README
+
 wmf 0.2.1
 =============
 * Adds a Contributor Code of Conduct

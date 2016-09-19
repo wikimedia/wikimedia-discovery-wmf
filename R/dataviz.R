@@ -20,8 +20,8 @@ theme_fivethirtynine <- function(base_size = 12, base_family = "sans"){
      theme(line = element_line(), rect = element_rect(fill = ggthemes:::ggthemes_data$fivethirtyeight["ltgray"],
                                                       linetype = 0, colour = NA),
            text = element_text(colour = ggthemes:::ggthemes_data$fivethirtyeight["dkgray"], margin = ggplot2::margin(), debug = FALSE),
-           axis.title.y = element_text(size = rel(2), angle = 90, vjust = 1.5, margin = ggplot2::margin(12), debug = FALSE),
-           axis.text = element_text(size=rel(1.5)),
+           axis.title.y = element_text(size = rel(2), angle = 90, vjust = 1.5, margin = ggplot2::margin(0, 12), debug = FALSE),
+           axis.text = element_text(size = rel(1.5)),
            axis.title.x = element_text(size = rel(2), margin = ggplot2::margin(12), debug = FALSE),
            axis.ticks = element_blank(), axis.line = element_blank(),
            legend.background = element_rect(), legend.position = "bottom",
@@ -31,8 +31,8 @@ theme_fivethirtynine <- function(base_size = 12, base_family = "sans"){
            panel.grid.minor = element_blank(),
            plot.title = element_text(hjust = 0, size = rel(1.5), face = "bold", margin = ggplot2::margin(), debug = FALSE),
            strip.background = element_rect(),
-           legend.text = element_text(size=18), legend.title = element_text(size=rel(1.5), margin = ggplot2::margin(4), debug = FALSE),
-           legend.key.size = unit(1,"in"),
+           legend.text = element_text(size = 18), legend.title = element_text(size = rel(1.5), margin = ggplot2::margin(4), debug = FALSE),
+           legend.key.size = unit(1, "in"),
            panel.background = element_rect(fill = "transparent", color = NA),
            plot.background = element_rect(fill = "transparent", color = NA)))
 }

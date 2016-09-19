@@ -1,3 +1,7 @@
+wmf 0.2.3
+=============
+Fixes ggplot2 theme margin bug [discovered & fixed](https://github.com/wikimedia/wikimedia-discovery-wmf/pull/1) by Oliver Keyes.
+
 wmf 0.2.2
 =============
 * Updates `query_hive()` to support [JAR path overriding](https://wikitech.wikimedia.org/wiki/Analytics/Cluster/Hive/QueryUsingUDF#Testing_changes_to_existing_udf)

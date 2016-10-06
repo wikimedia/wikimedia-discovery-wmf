@@ -1,6 +1,10 @@
+wmf 0.2.4
+============
+* Ungroups grouped data frames when rewriting. See [T146422](https://phabricator.wikimedia.org/T146422) for more details.
+
 wmf 0.2.3
 =============
-Fixes ggplot2 theme margin bug [discovered & fixed](https://github.com/wikimedia/wikimedia-discovery-wmf/pull/1) by Oliver Keyes.
+* Fixes ggplot2 theme margin bug [discovered & fixed](https://github.com/wikimedia/wikimedia-discovery-wmf/pull/1) by Oliver Keyes.
 
 wmf 0.2.2
 =============

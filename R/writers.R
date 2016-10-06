@@ -27,6 +27,9 @@ write_conditional <- function(x, file){
 #'@importFrom readr read_tsv
 #'@export
 rewrite_conditional <- function(x, file, n_days = 30) {
+  if ("grouped_df" %in% class(x)) {
+    x <- dplyr::ungroup(x)
+  }
   if (file.exists(file)) {
     y <- readr::read_tsv(file)
     y <- y[order(y$date, decreasing = FALSE), ]

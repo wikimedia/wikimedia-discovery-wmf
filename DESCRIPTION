@@ -1,11 +1,11 @@
 Package: wmf
 Type: Package
 Title: R Code for Wikimedia Foundation Internal Usage
-Version: 0.2.4
-Date: 2016-10-05
+Version: 0.2.5
+Date: 2016-12-07
 Authors@R: c(
-  person("Oliver", "Keyes", email = "oliver@wikimedia.org", role = "cre"),
-  person("Mikhail", "Popov", email = "mpopov@wikimedia.org", role = "aut"))
+  person("Oliver", "Keyes", role = "aut"),
+  person("Mikhail", "Popov", email = "mpopov@wikimedia.org", role = c("aut", "cre")))
 Description: More about what it does (maybe more than one line).
 License: Uhhhhh
 LazyData: TRUE
@@ -16,8 +16,9 @@ Imports:
     ggplot2,
     readr,
     ggthemes
-URL: https://github.com/Ironholds/wmf
-BugReports: https://github.com/Ironholds/wmf/issues
+URL: https://phabricator.wikimedia.org/diffusion/1821/
+BugReports: https://phabricator.wikimedia.org/maniphest/task/create/?
+    projects=Discovery-Analysis
 Suggests:
     testthat
 RoxygenNote: 5.0.1

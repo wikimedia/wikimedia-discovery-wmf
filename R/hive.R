@@ -51,7 +51,7 @@ query_hive <- function(query, override_jars = FALSE) {
     try({
       system(paste0("export HADOOP_HEAPSIZE=1024 && hive -S ",
                     ifelse(override_jars, "--hiveconf hive.aux.jars.path=", ""),
-                    " -f ", query_dump, " 2> /dev/null | grep -v parquet.hadoop > ", results_dump))
+                    " -f ", query_dump, " 2> /dev/null | grep -v parquet.hadoop | grep -v WARN: > ", results_dump))
       results <- read.delim(results_dump, sep = "\t", quote = "", as.is = TRUE, header = TRUE)
     })
 

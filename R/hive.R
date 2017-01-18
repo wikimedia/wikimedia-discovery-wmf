@@ -47,11 +47,15 @@ query_hive <- function(query, override_jars = FALSE) {
     cat(query, file = query_dump)
     results_dump <- tempfile()
 
+    filters <- paste0(c("", paste("grep -v", c("JAVA_TOOL_OPTIONS", "parquet.hadoop", "WARN:", ":WARN"))), collapse = " | ")
+
     # Query and read in the results
     try({
-      system(paste0("export HADOOP_HEAPSIZE=1024 && hive -S ",
-                    ifelse(override_jars, "--hiveconf hive.aux.jars.path=", ""),
-                    " -f ", query_dump, " 2> /dev/null | grep -v parquet.hadoop | grep -v WARN: > ", results_dump))
+      system(
+        paste0("export HADOOP_HEAPSIZE=1024 && hive -S ",
+               ifelse(override_jars, "--hiveconf hive.aux.jars.path= ", ""),
+               "-f ", query_dump, " 2> /dev/null", filters, " > ", results_dump)
+      )
       results <- read.delim(results_dump, sep = "\t", quote = "", as.is = TRUE, header = TRUE)
     })
 

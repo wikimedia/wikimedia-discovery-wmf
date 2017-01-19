@@ -38,8 +38,8 @@ stop_on_empty <- function(data){
 #'@export
 mysql_connect <- function(database, default_file = NULL) {
   if (is.null(default_file)) {
-    default_file = "/etc/mysql/conf.d/stats-research-client.cnf"
-    # there's also "/etc/mysql/conf.d/analytics-research-client.cnf"
+    default_file = "/etc/mysql/conf.d/analytics-research-client.cnf"
+    # there's also "/etc/mysql/conf.d/stats-research-client.cnf"
   }
   if (RMySQL_version() > 93) {
     con <- dbConnect(drv = RMySQL::MySQL(),

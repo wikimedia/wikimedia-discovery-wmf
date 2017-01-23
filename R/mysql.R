@@ -38,8 +38,30 @@ stop_on_empty <- function(data){
 #'@export
 mysql_connect <- function(database, default_file = NULL) {
   if (is.null(default_file)) {
-    default_file = "/etc/mysql/conf.d/analytics-research-client.cnf"
-    # there's also "/etc/mysql/conf.d/stats-research-client.cnf"
+    possible_cnfs <- c(
+      "analytics-research-client.cnf", # on stat1002
+      "stats-research-client.cnf", # on stat1003
+      "research-client.cnf" # on notebook1001
+    )
+    for (cnf in file.path("/etc/mysql/conf.d", possible_cnfs)) {
+      if (file.exists(cnf)) {
+        default_file <- cnf
+        break
+      }
+    }
+    if (is.null(default_file)) {
+      if (dir.exists("/etc/mysql/conf.d")) {
+        cnfs <- dir("/etc/mysql/conf.d", pattern = "*.cnf")
+        if (length(cnfs) == 0) {
+          stop("no credentials found in mysql conf dir")
+        } else {
+          warning("didn't find any of the specified credentials (", paste0(possible_cnfs, collapse = ", "), "), but going to try this one: ", cnfs[1])
+          default_file <- cnfs[1]
+        }
+      } else {
+        stop("no configuration directory for mysql credentials")
+      }
+    }
   }
   if (RMySQL_version() > 93) {
     con <- dbConnect(drv = RMySQL::MySQL(),

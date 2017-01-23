@@ -1,3 +1,8 @@
+wmf 0.2.6
+=========
+* Adds support for more MySQL config filenames since those vary between the different machines
+* Smarter about choosing a config file
+
 wmf 0.2.5
 =========
 * Fixes Hive query execution to remove messages/warnings.

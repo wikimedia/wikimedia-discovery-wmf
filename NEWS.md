@@ -1,3 +1,15 @@
+wmf 0.3.0
+=========
+* C++-based `exact_binomial()` to quickly estimate sample size for exact binomial tests
+* Functions for working with interleaved search results experiments
+  * See `?interleaved` for details
+  * See `vignette("interleaved", package = "wmf")` for an example
+  * Requires a compiler that supports C++11
+* ggplot themes `theme_min()` and `theme_facet()`
+* Documentation updates
+* Syntax-checking unit test
+* MIT licensing
+
 wmf 0.2.7
 =========
 * Changes which host MySQL functions connect to, depending on the database:

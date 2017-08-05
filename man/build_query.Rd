@@ -7,15 +7,15 @@
 build_query(fields, table, date = NULL, conditionals = NULL)
 }
 \arguments{
-\item{fields}{the SELECT statement.}
+\item{fields}{the \code{SELECT} statement}
 
-\item{table}{the table to use.}
+\item{table}{the table to use}
 
-\item{date}{the date to restrict to. If NULL, yesterday will be used.}
+\item{date}{the date to restrict to. If \code{NULL}, yesterday will be used}
 
-\item{any}{other conditionals to include in the WHERE statement.}
+\item{conditionals}{other conditions to include in the \code{WHERE} statement}
 }
 \description{
-constructs a MySQL query with a conditional around date.
+Constructs a MySQL query with a conditional around date.
 This is aimed at eventlogging, where the date/time is always "timestamp".
 }

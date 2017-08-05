@@ -13,10 +13,13 @@ theme_fivethirtynine(base_size = 12, base_family = "sans")
 \item{base_family}{base font family}
 }
 \description{
-A modification of \code{ggthemes::theme_fivethirtyeight}
+A modification of \code{\link[ggthemes:theme_fivethirtyeight]{ggthemes::theme_fivethirtyeight()}}
 }
 \details{
 Basically it adds axis titles (with some modification on the y to
- allow for long titles) back in and does a small amount of reduction of the
- overall plot size to avoid an absolute ton of extraneous spacing.
+allow for long titles) back in and does a small amount of reduction of the
+overall plot size to avoid an absolute ton of extraneous spacing.
+}
+\author{
+Oliver Keyes
 }

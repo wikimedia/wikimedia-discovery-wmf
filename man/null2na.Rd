@@ -2,17 +2,27 @@
 % Please edit documentation in R/utils.R
 \name{null2na}
 \alias{null2na}
-\title{Turns Null Into Character "NA"}
+\title{Turn Null Into Character "NA"}
 \usage{
 null2na(x)
 }
 \arguments{
-\item{x}{A list}
+\item{x}{a list}
 }
 \value{
 If any element from the input list is NULL, they will be turned into character
- "NA". Otherwise, return the original list.
+"NA". Otherwise, return the original list.
 }
 \description{
-The function turns NULL in a list into character "NA".
+This function turns \code{NULL} in a list into character "NA", which
+can be very useful when processing JSON data that has \code{null} values.
+}
+\examples{
+\dontrun{
+result <- mysql_read("SELECT userAgent FROM ...", "log")
+ua <- purrr::map_df(
+  result$userAgent,
+  ~ null2na(jsonlite::fromJSON(.x, simplifyVector = FALSE))
+)
+}
 }

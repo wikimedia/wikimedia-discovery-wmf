@@ -7,13 +7,14 @@
 date_clause(date)
 }
 \arguments{
-\item{date}{the date to use. If NULL, yesterday will be used.}
+\item{date}{if \code{NULL}, yesterday will be used}
 }
 \value{
-a list containing two elements, "date_clause" and "date"; the returning of
-the date allows you to include it with.
+a list containing two elements: "date_clause" and "date"; the
+returning of the date allows you to include it
 }
 \description{
-what it says on the tin; generates a "WHERE year = foo AND month = bar" using lubridate
+What it says on the tin; generates a
+\code{WHERE year = foo AND month = bar}
 that can then be combined with other elements to form a Hive query.
 }

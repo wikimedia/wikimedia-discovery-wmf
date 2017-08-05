@@ -2,26 +2,44 @@
 % Please edit documentation in R/logs.R
 \name{read_sampled_log}
 \alias{read_sampled_log}
-\title{read a sampled log file}
+\title{Read a sampled log file}
 \usage{
 read_sampled_log(file, transparent = FALSE, nrows = NULL)
 }
 \arguments{
-\item{file}{a filename, retrieved with \code{\link{get_logfile}}}
+\item{file}{a filename, retrieved with \code{\link[=get_logfile]{get_logfile()}}}
 
 \item{transparent}{a logical flag whether to gunzip the log file explicitly
 first (default) or read it in directly.}
 
-\item{nrows}{Number of rows to read in. (Optional)}
+\item{nrows}{number of rows to read in; \emph{optional}}
 }
 \value{
-a data.frame containing 16 columns - "squid", "sequence_no", "timestamp",
- "servicetime", "ip_address", "status_code", "reply_size", "request_method",
- "url", "squid_status", "mime_type", "referer", "x_forwarded", "user_agent",
- "lang" and "x_analytics".
+a \code{data.frame} containing 16 columns:
+\itemize{
+\item squid
+\item sequence_no
+\item timestamp
+\item servicetime
+\item ip_address
+\item status_code
+\item reply_size
+\item request_method
+\item url
+\item squid_status
+\item mime_type
+\item referer
+\item x_forwarded
+\item user_agent
+\item lang
+\item x_analytics
+}
 }
 \description{
-read a sampled log file identified with \code{\link{get_logfile}}.
+Reads a sampled log file identified with \code{\link[=get_logfile]{get_logfile()}}.
 The sampled logs are returned as a data.frame with 16 columns - see
- the "Value" documentation.
+the \strong{Value} documentation.
+}
+\author{
+Oliver Keyes
 }

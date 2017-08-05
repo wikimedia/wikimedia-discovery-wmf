@@ -2,7 +2,7 @@
 % Please edit documentation in R/hive.R
 \name{query_hive}
 \alias{query_hive}
-\title{hive_query}
+\title{Query Hadoop cluster with Hive}
 \usage{
 query_hive(query, override_jars = FALSE)
 }
@@ -12,50 +12,41 @@ query_hive(query, override_jars = FALSE)
 \item{override_jars}{A logical flag indicating whether to override the path.
 Hive on WMF's analytics machine(s) loads some JARs by default, so if your
 query uses an updated version of an existing UDF and you want to load the
-JAR that you built yourself, set this to TRUE. See
-\href{https://wikitech.wikimedia.org/wiki/Analytics/Cluster/Hive/QueryUsingUDF#Testing_changes_to_existing_udf}{this section}
+JAR that you built yourself, set this to \code{TRUE}. See
+\href{https://wikitech.wikimedia.org/wiki/Analytics/Systems/Cluster/Hive/QueryUsingUDF#Testing_changes_to_existing_udf}{Testing changes to existing UDF}
 for more details.}
 }
 \value{
-a data.frame containing the results of the query, or a boolean TRUE if the user has chosen
-to write straight to file.
+a \code{data.frame} containing the results of the query, or a \code{TRUE} if
+the user has chosen to write straight to file.
 }
 \description{
-this is the "old" hive querying function - it's deprecated as all hell and waiting
-until Andrew sticks the hive server on a dedicated and more powerful machine.
-}
-\details{
-Hive querying function
+Queries Hive
 }
 \section{escaping}{
 
-\code{hive_query} works by running the query you provide through the CLI via a system() call.
-As a result, single escapes for meaningful characters (such as quotes) within the query will not work:
-R will interpret them only as escaping that character /within R/. Double escaping (\\\) is thus necessary,
-in the same way that it is for regular expressions.
+\code{hive_query} works by running the query you provide through the CLI via a
+\code{\link[=system]{system()}} call. As a result, single escapes for meaningful characters
+(such as quotes) within the query will not work: R will interpret them
+only as escaping that character /within R/. Double escaping (\) is thus
+necessary, in the same way that it is for regular expressions.
 }
 
-\section{handling our hadoop/hive setup}{
+\section{Handling our hadoop/hive setup}{
 
-
-The \code{webrequests} table is documented
-\href{https://wikitech.wikimedia.org/wiki/Analytics/Cluster/Hive}{on Wikitech}, which also provides
-\href{https://wikitech.wikimedia.org/wiki/Analytics/Cluster/Hive/Queries}{a set of example
-queries}.
-
-When it comes to manipulating the rows with Java before they get to you, Nuria has written a
-\href{https://wikitech.wikimedia.org/wiki/Analytics/Cluster/Hive/QueryUsingUDF}{brief tutorial on loading UDFs}
-which should help if you want to engage in that; the example provided is a user agent parser, allowing you to
-get the equivalent of \code{\link{ua_parse}}'s output further upstream.
+The \code{webrequests} table is documented \href{https://wikitech.wikimedia.org/wiki/Analytics/Systems/Cluster/Hive}{on Wikitech},
+which also provides \href{https://wikitech.wikimedia.org/wiki/Analytics/Systems/Cluster/Hive/Queries}{a set of example queries}. When it comes to manipulating the rows with Java before they get to you, Nuria has written a
+\href{https://wikitech.wikimedia.org/wiki/Analytics/Systems/Cluster/Hive/QueryUsingUDF}{brief tutorial on loading UDFs}
+which should help if you want to engage in that.
 }
 
 \examples{
 \dontrun{
 query_hive("USE wmf; DESCRIBE webrequest;")
 }
-
 }
 \seealso{
-\code{\link{log_strptime}} for converting the "dt" column in the webrequests table to POSIXlt,
-and \code{\link{mysql_query}} and \code{\link{global_query}} for querying our MySQL databases.
+\code{\link[lubridate:ymd_hms]{lubridate::ymd_hms()}} for converting the "dt" column in the
+webrequests table to proper datetime, and \code{\link[=mysql_read]{mysql_read()}} and
+\code{\link[=global_query]{global_query()}} for querying our MySQL databases
 }

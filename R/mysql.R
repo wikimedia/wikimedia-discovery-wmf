@@ -1,49 +1,45 @@
 RMySQL_version <- function() {
   # Returns 93 if the installed version of RMySQL is 0.9.3
-  return(as.numeric(paste0(unlist(packageVersion("RMySQL")), collapse = "")))
+  return(as.numeric(paste0(unlist(utils::packageVersion("RMySQL")), collapse = "")))
 }
 
 # Ensure that we recognise and error on 0 rows
-stop_on_empty <- function(data){
-  if(nrow(data) == 0){
+stop_on_empty <- function(data) {
+  if (nrow(data) == 0) {
     stop("No rows were returned from the database")
   }
   return(invisible())
 }
 
-
-#'@title Work with MySQL databases
-#'@description Read from, write to, and check data from the MySQL databases and
-#'  tables in the Wikimedia cluster. Assumes the presence of a validly
-#'  formatted configuration file.
-#'
-#'@param query A SQL query.
-#'
-#'@param database The name of the database to query.
-#'@param hostname The name of the machine to connect to, which depends on
-#'  whether you want to fetch event logging data (from **db1047**) or wiki
-#'  content data (from **analytics-store**)
-#'@param con A MySQL connection returned by \code{mysql_connect}.
-#'  Optional -- if not provided, a temporary connection will be opened up.
-#'
-#'@param table The name of a table to check for the existence of or create,
-#'  depending on the function.
-#'
-#'@param ... Further arguments to pass to dbWriteTable. See ?dbWriteTable for more details.
-#'
-#'@name mysql
-#'@rdname mysql
-#'@importMethodsFrom RMySQL dbConnect
-#'
-#'@seealso \code{\link{hive_query}} or \code{\link{global_query}}
-#'
-#'@export
+#' @title Work with MySQL databases
+#' @description Read from, write to, and check data from the MySQL databases and
+#'   tables in the Wikimedia cluster. Assumes the presence of a validly
+#'   formatted configuration file.
+#' @param query SQL query
+#' @param database name of the database to query
+#' @param hostname name of the machine to connect to, which depends on whether
+#'   `query` is used to fetch from the **log** `database` (in which case
+#'   connect to "db1047.eqiad.wmnet") or a MediaWiki ("content") DB (in which
+#'   case connect to "analytics-store.eqiad.wmnet" as before)
+#' @param con MySQL connection returned by [mysql_connect()]; *optional* -- if
+#'   not provided, a temporary connection will be opened up
+#' @param table_name name of a table to check for the existence of or create,
+#'   depending on the function
+#' @param default_file name of a config file containing username and password
+#'   to use when connecting
+#' @name mysql
+#' @rdname mysql
+#' @seealso [query_hive()] or [global_query()]
+#' @export
 mysql_connect <- function(
   database, default_file = NULL,
   hostname = ifelse(database == "log", "db1047.eqiad.wmnet", "analytics-store.eqiad.wmnet")
 ) {
+  # Begin Exclude Linting
   if (is.null(default_file)) {
     possible_cnfs <- c(
+      "discovery-stats-client.cnf", # on stat1005
+      "statistics-private-client.cnf", # on stat1005
       "analytics-research-client.cnf", # on stat1005
       "stats-research-client.cnf", # on stat1006 and also on stat1005
       "research-client.cnf" # on notebook1001
@@ -60,8 +56,10 @@ mysql_connect <- function(
         if (length(cnfs) == 0) {
           stop("no credentials found in mysql conf dir")
         } else {
-          warning("didn't find any of the specified credentials (", paste0(possible_cnfs, collapse = ", "), "), but going to try this one: ", cnfs[1])
-          default_file <- cnfs[1]
+          stop(
+            "didn't find any of the specified credentials (",
+            paste0(possible_cnfs, collapse = ", "), ")"
+          )
         }
       } else {
         stop("no configuration directory for mysql credentials")
@@ -69,33 +67,35 @@ mysql_connect <- function(
     }
   }
   if (RMySQL_version() > 93) {
-    con <- dbConnect(
+    con <- RMySQL::dbConnect(
       drv = RMySQL::MySQL(), host = hostname,
       dbname = database, default.file = default_file
     )
   } else {
     # Using version RMySQL 0.9.3 or older:
-    con <- dbConnect(
+    con <- RMySQL::dbConnect(
       drv = "MySQL", host = hostname,
       dbname = database, default.file = default_file
     )
   }
+  # End Exclude Linting
   return(con)
 }
 
-#'@rdname mysql
-#'@importMethodsFrom RMySQL dbSendQuery dbDisconnect dbListResults dbClearResult fetch
-#'@export
+#' @rdname mysql
+#' @export
 mysql_read <- function(query, database, con = NULL) {
   already_connected <- !is.null(con)
   if (!already_connected) {
     # Open a temporary connection to the db:
     con <- mysql_connect(database)
   }
-  to_fetch <- dbSendQuery(con, query)
-  data <- fetch(to_fetch, -1)
+  # Begin Exclude Linting
+  to_fetch <- RMySQL::dbSendQuery(con, query)
+  data <- RMySQL::fetch(to_fetch, -1)
   message(sprintf("Fetched %.0f rows and %.0f columns.", nrow(data), ncol(data)))
-  dbClearResult(dbListResults(con)[[1]])
+  RMySQL::dbClearResult(RMySQL::dbListResults(con)[[1]])
+  # End Exclude Linting
   if (!already_connected) {
     # Close temporary connection:
     mysql_close(con)
@@ -104,9 +104,8 @@ mysql_read <- function(query, database, con = NULL) {
   return(data)
 }
 
-#'@rdname mysql
-#'@importMethodsFrom RMySQL dbExistsTable dbDisconnect
-#'@export
+#' @rdname mysql
+#' @export
 mysql_exists <- function(database, table_name, con = NULL) {
   already_connected <- !is.null(con)
   if (!already_connected) {
@@ -114,7 +113,9 @@ mysql_exists <- function(database, table_name, con = NULL) {
     con <- mysql_connect(database)
   }
   # Grab the results and close off:
-  table_exists <- dbExistsTable(conn = con, name = table_name)
+  # Begin Exclude Linting
+  table_exists <- RMySQL::dbExistsTable(conn = con, name = table_name)
+  # End Exclude Linting
   if (!already_connected) {
     # Close temporary connection:
     mysql_close(con)
@@ -123,9 +124,10 @@ mysql_exists <- function(database, table_name, con = NULL) {
   return(table_exists)
 }
 
-#'@rdname mysql
-#'@importMethodsFrom RMySQL dbWriteTable dbDisconnect
-#'@export
+#' @param x a `data.frame` to write
+#' @param ... additional arguments to pass to `dbWriteTable`
+#' @rdname mysql
+#' @export
 mysql_write <- function(x, database, table_name, con = NULL, ...){
   already_connected <- !is.null(con)
   if (!already_connected) {
@@ -133,11 +135,15 @@ mysql_write <- function(x, database, table_name, con = NULL, ...){
     con <- mysql_connect(database)
   }
   # Write:
-  result <- dbWriteTable(conn = con,
-                         name = table_name,
-                         value = x,
-                         row.names = FALSE,
-                         ...)
+  # Begin Exclude Linting
+  result <- RMySQL::dbWriteTable(
+    conn = con,
+    name = table_name,
+    value = x,
+    row.names = FALSE,
+    ...
+  )
+  # End Exclude Linting
   if (!already_connected) {
     # Close temporary connection:
     mysql_close(con)
@@ -146,33 +152,30 @@ mysql_write <- function(x, database, table_name, con = NULL, ...){
   return(result)
 }
 
-#'@rdname mysql
-#'@importMethodsFrom RMySQL dbDisconnect
-#'@export
+#' @rdname mysql
+#' @export
 mysql_close <- function(con) {
-  dbDisconnect(con)
+  # Begin Exclude Linting
+  RMySQL::dbDisconnect(con)
+  # End Exclude Linting
   return(invisible())
 }
-#'@rdname mysql
-#'@export
+
+#' @rdname mysql
+#' @export
 mysql_disconnect <- function(con) {
   mysql_close(con)
 }
 
-#'@title Builds a MySQL query aimed at the EventLogging-centric formats
-#'@description constructs a MySQL query with a conditional around date.
-#'This is aimed at eventlogging, where the date/time is always "timestamp".
-#'
-#'@param fields the SELECT statement.
-#'
-#'@param table the table to use.
-#'
-#'@param date the date to restrict to. If NULL, yesterday will be used.
-#'
-#'@param any other conditionals to include in the WHERE statement.
-#'
-#'@export
-build_query <- function(fields, table, date = NULL, conditionals = NULL){
+#' @title Builds a MySQL query aimed at the EventLogging-centric formats
+#' @description Constructs a MySQL query with a conditional around date.
+#'   This is aimed at eventlogging, where the date/time is always "timestamp".
+#' @param fields the `SELECT` statement
+#' @param table the table to use
+#' @param date the date to restrict to. If `NULL`, yesterday will be used
+#' @param conditionals other conditions to include in the `WHERE` statement
+#' @export
+build_query <- function(fields, table, date = NULL, conditionals = NULL) {
 
   # Ensure we have a date and deconstruct it into a MW-friendly format
   if (is.null(date)) {
@@ -181,8 +184,11 @@ build_query <- function(fields, table, date = NULL, conditionals = NULL){
   date <- gsub(x = date, pattern = "-", replacement = "")
 
   # Build the query proper (this will work for EL schemas where the field is always 'timestamp')
-  query <- paste(fields, "FROM", table, "WHERE LEFT(timestamp,8) =", date,
-                 ifelse(is.null(conditionals), "", "AND"), conditionals)
+  query <- paste0(
+    fields, " FROM ", table, " WHERE LEFT(timestamp, 8) = '", date, "'",
+    ifelse(is.null(conditionals), "", " AND "),
+    conditionals
+  )
 
   results <- mysql_read(query, "log")
   stop_on_empty(results)

@@ -24,27 +24,33 @@ mysql_close(con)
 mysql_disconnect(con)
 }
 \arguments{
-\item{database}{The name of the database to query.}
+\item{database}{name of the database to query}
 
-\item{hostname}{The name of the machine to connect to, which depends on
-whether you want to fetch event logging data (from **db1047**) or wiki
-content data (from **analytics-store**)}
+\item{default_file}{name of a config file containing username and password
+to use when connecting}
 
-\item{query}{A SQL query.}
+\item{hostname}{name of the machine to connect to, which depends on whether
+\code{query} is used to fetch from the \strong{log} \code{database} (in which case
+connect to "db1047.eqiad.wmnet") or a MediaWiki ("content") DB (in which
+case connect to "analytics-store.eqiad.wmnet" as before)}
 
-\item{con}{A MySQL connection returned by \code{mysql_connect}.
-Optional -- if not provided, a temporary connection will be opened up.}
+\item{query}{SQL query}
 
-\item{...}{Further arguments to pass to dbWriteTable. See ?dbWriteTable for more details.}
+\item{con}{MySQL connection returned by \code{\link[=mysql_connect]{mysql_connect()}}; \emph{optional} -- if
+not provided, a temporary connection will be opened up}
 
-\item{table}{The name of a table to check for the existence of or create,
-depending on the function.}
+\item{table_name}{name of a table to check for the existence of or create,
+depending on the function}
+
+\item{x}{a \code{data.frame} to write}
+
+\item{...}{additional arguments to pass to \code{dbWriteTable}}
 }
 \description{
 Read from, write to, and check data from the MySQL databases and
- tables in the Wikimedia cluster. Assumes the presence of a validly
- formatted configuration file.
+tables in the Wikimedia cluster. Assumes the presence of a validly
+formatted configuration file.
 }
 \seealso{
-\code{\link{hive_query}} or \code{\link{global_query}}
+\code{\link[=query_hive]{query_hive()}} or \code{\link[=global_query]{global_query()}}
 }

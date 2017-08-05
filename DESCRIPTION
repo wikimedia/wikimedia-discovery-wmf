@@ -1,24 +1,44 @@
 Package: wmf
 Type: Package
 Title: R Code for Wikimedia Foundation Internal Usage
-Version: 0.2.7
-Date: 2017-10-05
+Version: 0.3.0
+Date: 2017-11-01
 Authors@R: c(
-  person("Oliver", "Keyes", role = "aut"),
-  person("Mikhail", "Popov", email = "mpopov@wikimedia.org", role = c("aut", "cre")))
-Description: More about what it does (maybe more than one line).
-License: Uhhhhh
-LazyData: TRUE
-Imports:
-    RMySQL,
-    urltools,
-    pwr,
-    ggplot2,
-    readr,
-    ggthemes
+    person("Mikhail", "Popov", email = "mikhail@wikimedia.org", role = c("aut", "cre")),
+    person("Oliver", "Keyes", role = "aut", comment = "No longer employed at the Foundation"),
+    person("Chelsy", "Xie", email = "cxie@wikimedia.org", role = "ctb")
+    )
+Description: This package contains functions made for Analysts at Wikimedia
+    Foundation, but can be used by people outside of the Foundation.
+License: MIT + file LICENSE
 URL: https://phabricator.wikimedia.org/diffusion/1821/
 BugReports: https://phabricator.wikimedia.org/maniphest/task/create/?
     projects=Discovery-Analysis
+Depends: R (>= 3.1.0)
+Imports:
+    RMySQL,
+    Rcpp (>= 0.10.3),
+    devtools,
+    urltools,
+    ggplot2,
+    ggthemes (>= 3.4.0),
+    lubridate,
+    progress,
+    readr,
+    pwr
 Suggests:
-    testthat
+    lintr,
+    testthat,
+    knitr,
+    rmarkdown,
+    dplyr
+LinkingTo:
+    Rcpp,
+    BH,
+    RcppArmadillo (>= 0.3.810)
+NeedsCompilation: yes
+SystemRequirements: C++11
+LazyData: TRUE
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1
+VignetteBuilder: knitr

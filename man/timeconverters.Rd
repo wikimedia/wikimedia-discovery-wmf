@@ -6,7 +6,7 @@
 \alias{from_log}
 \alias{to_mediawiki}
 \alias{to_log}
-\title{convert to and from common timestamp formats}
+\title{Convert to and from common timestamp formats}
 \usage{
 from_mediawiki(x)
 
@@ -20,8 +20,14 @@ to_log(x)
 \item{x}{a vector of timestamps}
 }
 \description{
-convert to and from MediaWiki and request log timestamp formats
+Convert to and from MediaWiki and request log timestamp formats
 }
 \examples{
 from_mediawiki("20150101010301")
+}
+\seealso{
+\code{\link[lubridate:ymd_hms]{lubridate::ymd_hms()}}
+}
+\author{
+Oliver Keyes
 }

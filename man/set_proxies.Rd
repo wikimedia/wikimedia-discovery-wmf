@@ -2,22 +2,21 @@
 % Please edit documentation in R/proxies.R
 \name{set_proxies}
 \alias{set_proxies}
-\title{set HTTP and HTTPS proxies}
+\title{Set HTTP and HTTPS proxies}
 \usage{
 set_proxies()
 }
 \description{
-set the HTTP and HTTPS proxies when running R on
-one of the Wikimedia servers
+Sets the HTTP and HTTPS proxies when running R on
+Wikimedia machines.
 }
 \examples{
 \dontrun{
-#This will fail in the cluster
+# This will fail in the cluster
 devtools::install_github("ironholds/urltools")
 
-#This will work
+# This will work
 set_proxies()
 devtools::install_github("ironholds/urltools")
 }
-
 }

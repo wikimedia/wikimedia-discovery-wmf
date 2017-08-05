@@ -1,12 +1,17 @@
-#'@title Turns Null Into Character "NA"
-#'@description The function turns NULL in a list into character "NA".
-#'
-#'@param x A list
-#'
-#'@return If any element from the input list is NULL, they will be turned into character
+#' @title Turn Null Into Character "NA"
+#' @description This function turns `NULL` in a list into character "NA", which
+#'   can be very useful when processing JSON data that has `null` values.
+#' @param x a list
+#' @return If any element from the input list is NULL, they will be turned into character
 #'  "NA". Otherwise, return the original list.
-#'
-#'@export
+#' @examples \dontrun{
+#' result <- mysql_read("SELECT userAgent FROM ...", "log")
+#' ua <- purrr::map_df(
+#'   result$userAgent,
+#'   ~ null2na(jsonlite::fromJSON(.x, simplifyVector = FALSE))
+#' )
+#' }
+#' @export
 null2na <- function(x) {
   return(lapply(x, function(y) {
     if (is.null(y)) {

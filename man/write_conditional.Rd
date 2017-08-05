@@ -9,9 +9,11 @@ write_conditional(x, file)
 \arguments{
 \item{x}{the object to write out}
 
-\item{file}{the path to the file to use.}
+\item{file}{the path to the file to use}
 }
 \description{
-if the file already exists, append. If it
-doesn't, create!
+If the file already exists, append. If it doesn't, create!
+}
+\seealso{
+\code{\link[=rewrite_conditional]{rewrite_conditional()}}
 }

@@ -15,12 +15,11 @@ global_query(query, project_type = "all")
 \code{global_query} is a simple wrapper around the mysql queries that allows a useR to send a query to all production
 dbs on analytics-store.eqiad.wmnet, joining the results from each query into a single object.
 }
-\author{
-Oliver Keyes <okeyes@wikimedia.org>
-}
 \seealso{
 \code{\link{mysql_read}} for querying an individual db, \code{\link{mw_strptime}}
 for converting MediaWiki timestamps into POSIXlt timestamps, or \code{\link{hive_query}} for
 accessing the Hive datastore.
 }
-
+\author{
+Oliver Keyes <okeyes@wikimedia.org>
+}

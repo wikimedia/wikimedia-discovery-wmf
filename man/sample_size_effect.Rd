@@ -32,4 +32,3 @@ sample_size_effect(0.1)
 sample_size_effect(w = 0.1, groups = 3, sig_level = 0.001, power = 0.9)
 
 }
-

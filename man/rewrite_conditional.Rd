@@ -18,4 +18,3 @@ rewrite_conditional(x, file, n_days = 30)
 writes out temporal data to a file while ensuring
 the file only has \code{n_days} worth of data in it.
 }
-

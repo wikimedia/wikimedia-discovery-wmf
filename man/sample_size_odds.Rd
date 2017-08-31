@@ -46,6 +46,7 @@ Wang, H., Chow, S.-C., & Li, G. (2002). On sample size calculation based on
  Statistics}, \strong{12}(4), 471–483.
  \url{http://doi.org/10.1081/BIP-120016231}
 }
+
 \examples{
 sample_size_odds(p_treatment = 0.4, p_control = 0.25, power = 0.8)
 sample_size_odds(odds_ratio = 2, p_control = 0.4, power = c(0.8, 0.9, 0.95))
@@ -53,4 +54,3 @@ sample_size_odds(odds_ratio = 2, p_control = 0.4)
 sample_size_odds(odds_ratio = 2, p_control = 0.4, visualize = TRUE)
 
 }
-

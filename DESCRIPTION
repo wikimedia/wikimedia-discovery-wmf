@@ -21,4 +21,4 @@ BugReports: https://phabricator.wikimedia.org/maniphest/task/create/?
     projects=Discovery-Analysis
 Suggests:
     testthat
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

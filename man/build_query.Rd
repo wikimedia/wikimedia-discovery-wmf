@@ -19,4 +19,3 @@ build_query(fields, table, date = NULL, conditionals = NULL)
 constructs a MySQL query with a conditional around date.
 This is aimed at eventlogging, where the date/time is always "timestamp".
 }
-

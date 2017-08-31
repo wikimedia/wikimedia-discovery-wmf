@@ -24,4 +24,3 @@ Grab sampled log files to be piped into
 sampled log files; it can be used to retrieve a particular date range of
 files through the "earliest" and "latest" arguments.
 }
-

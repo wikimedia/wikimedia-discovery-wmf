@@ -17,4 +17,3 @@ the date allows you to include it with.
 what it says on the tin; generates a "WHERE year = foo AND month = bar" using lubridate
 that can then be combined with other elements to form a Hive query.
 }
-

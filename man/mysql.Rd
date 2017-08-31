@@ -2,12 +2,12 @@
 % Please edit documentation in R/mysql.R
 \name{mysql}
 \alias{mysql}
-\alias{mysql_close}
 \alias{mysql_connect}
-\alias{mysql_disconnect}
-\alias{mysql_exists}
 \alias{mysql_read}
+\alias{mysql_exists}
 \alias{mysql_write}
+\alias{mysql_close}
+\alias{mysql_disconnect}
 \title{Work with MySQL databases}
 \usage{
 mysql_connect(database, default_file = NULL)
@@ -43,4 +43,3 @@ Read from, write to, and check data from the MySQL databases and
 \seealso{
 \code{\link{hive_query}} or \code{\link{global_query}}
 }
-

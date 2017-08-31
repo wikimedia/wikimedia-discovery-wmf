@@ -48,6 +48,7 @@ When it comes to manipulating the rows with Java before they get to you, Nuria h
 which should help if you want to engage in that; the example provided is a user agent parser, allowing you to
 get the equivalent of \code{\link{ua_parse}}'s output further upstream.
 }
+
 \examples{
 \dontrun{
 query_hive("USE wmf; DESCRIBE webrequest;")
@@ -58,4 +59,3 @@ query_hive("USE wmf; DESCRIBE webrequest;")
 \code{\link{log_strptime}} for converting the "dt" column in the webrequests table to POSIXlt,
 and \code{\link{mysql_query}} and \code{\link{global_query}} for querying our MySQL databases.
 }
-

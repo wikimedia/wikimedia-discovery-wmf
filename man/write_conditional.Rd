@@ -15,4 +15,3 @@ write_conditional(x, file)
 if the file already exists, append. If it
 doesn't, create!
 }
-

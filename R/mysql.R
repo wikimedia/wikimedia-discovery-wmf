@@ -70,13 +70,13 @@ mysql_connect <- function(
   }
   if (RMySQL_version() > 93) {
     con <- dbConnect(
-      drv = RMySQL::MySQL(), host = host_name,
+      drv = RMySQL::MySQL(), host = hostname,
       dbname = database, default.file = default_file
     )
   } else {
     # Using version RMySQL 0.9.3 or older:
     con <- dbConnect(
-      drv = "MySQL", host = host_name,
+      drv = "MySQL", host = hostname,
       dbname = database, default.file = default_file
     )
   }

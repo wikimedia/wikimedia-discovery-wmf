@@ -1,3 +1,10 @@
+wmf 0.2.7
+=========
+* Changes which host MySQL functions connect to, depending on the database:
+  - "db1047.eqiad.wmnet" for event logging data from "log" db
+  - "analytics-store.eqiad.wmnet" (same as before) for wiki content
+* See [T176639](https://phabricator.wikimedia.org/T176639) for more details.
+
 wmf 0.2.6
 =========
 * Adds support for more MySQL config filenames since those vary between the different machines

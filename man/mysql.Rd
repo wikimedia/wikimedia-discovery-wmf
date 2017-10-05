@@ -10,7 +10,8 @@
 \alias{mysql_disconnect}
 \title{Work with MySQL databases}
 \usage{
-mysql_connect(database, default_file = NULL)
+mysql_connect(database, default_file = NULL, hostname = ifelse(database ==
+  "log", "db1047.eqiad.wmnet", "analytics-store.eqiad.wmnet"))
 
 mysql_read(query, database, con = NULL)
 
@@ -24,6 +25,10 @@ mysql_disconnect(con)
 }
 \arguments{
 \item{database}{The name of the database to query.}
+
+\item{hostname}{The name of the machine to connect to, which depends on
+whether you want to fetch event logging data (from **db1047**) or wiki
+content data (from **analytics-store**)}
 
 \item{query}{A SQL query.}
 

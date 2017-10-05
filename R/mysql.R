@@ -20,7 +20,9 @@ stop_on_empty <- function(data){
 #'@param query A SQL query.
 #'
 #'@param database The name of the database to query.
-#'
+#'@param hostname The name of the machine to connect to, which depends on
+#'  whether you want to fetch event logging data (from **db1047**) or wiki
+#'  content data (from **analytics-store**)
 #'@param con A MySQL connection returned by \code{mysql_connect}.
 #'  Optional -- if not provided, a temporary connection will be opened up.
 #'
@@ -36,11 +38,14 @@ stop_on_empty <- function(data){
 #'@seealso \code{\link{hive_query}} or \code{\link{global_query}}
 #'
 #'@export
-mysql_connect <- function(database, default_file = NULL) {
+mysql_connect <- function(
+  database, default_file = NULL,
+  hostname = ifelse(database == "log", "db1047.eqiad.wmnet", "analytics-store.eqiad.wmnet")
+) {
   if (is.null(default_file)) {
     possible_cnfs <- c(
-      "analytics-research-client.cnf", # on stat1002
-      "stats-research-client.cnf", # on stat1003
+      "analytics-research-client.cnf", # on stat1005
+      "stats-research-client.cnf", # on stat1006 and also on stat1005
       "research-client.cnf" # on notebook1001
     )
     for (cnf in file.path("/etc/mysql/conf.d", possible_cnfs)) {
@@ -64,13 +69,16 @@ mysql_connect <- function(database, default_file = NULL) {
     }
   }
   if (RMySQL_version() > 93) {
-    con <- dbConnect(drv = RMySQL::MySQL(),
-                     host = "analytics-store.eqiad.wmnet",
-                     dbname = database, default.file = default_file)
-  } else { # Using version RMySQL 0.9.3 or older:
-    con <- dbConnect(drv = "MySQL",
-                     host = "analytics-store.eqiad.wmnet",
-                     dbname = database, default.file = default_file)
+    con <- dbConnect(
+      drv = RMySQL::MySQL(), host = host_name,
+      dbname = database, default.file = default_file
+    )
+  } else {
+    # Using version RMySQL 0.9.3 or older:
+    con <- dbConnect(
+      drv = "MySQL", host = host_name,
+      dbname = database, default.file = default_file
+    )
   }
   return(con)
 }

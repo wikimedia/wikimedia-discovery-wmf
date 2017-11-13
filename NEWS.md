@@ -1,3 +1,7 @@
+wmf 0.3.1
+=========
+* Switched host name from db1047.eqiad.wmnet to db1108.eqiad.wmnet per [T156844](https://phabricator.wikimedia.org/T156844)
+
 wmf 0.3.0
 =========
 * C++-based `exact_binomial()` to quickly estimate sample size for exact binomial tests

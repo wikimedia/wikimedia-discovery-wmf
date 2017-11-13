@@ -11,7 +11,7 @@
 \title{Work with MySQL databases}
 \usage{
 mysql_connect(database, default_file = NULL, hostname = ifelse(database ==
-  "log", "db1047.eqiad.wmnet", "analytics-store.eqiad.wmnet"))
+  "log", "db1108.eqiad.wmnet", "analytics-store.eqiad.wmnet"))
 
 mysql_read(query, database, con = NULL)
 

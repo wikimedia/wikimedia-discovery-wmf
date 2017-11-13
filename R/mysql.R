@@ -33,7 +33,7 @@ stop_on_empty <- function(data) {
 #' @export
 mysql_connect <- function(
   database, default_file = NULL,
-  hostname = ifelse(database == "log", "db1047.eqiad.wmnet", "analytics-store.eqiad.wmnet")
+  hostname = ifelse(database == "log", "db1108.eqiad.wmnet", "analytics-store.eqiad.wmnet")
 ) {
   # Begin Exclude Linting
   if (is.null(default_file)) {

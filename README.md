@@ -4,7 +4,11 @@
 
 - `set_proxies` to set http(s) proxies on the analytics cluster
 - `global_query` for querying all of our MySQL databases
-- `from_mediawiki` and `from_log` (and corresponding `to_*` functions) to convert between time formats
+- Utilities for working with logs, including EventLogging data:
+  - `from_mediawiki` and `from_log` (and corresponding `to_*` functions) to convert between time formats
+  - `refine_eventlogs`
+    - parses date-time columns and JSON columns (via `parse_json`)
+    - removes the "event_" prefix from column names
 - `query_hive` for querying our Hadoop cluster via Hive
 - Sample size calculations:
     - `chisq_test_odds` estimates sample size for a chi-squared test given an odds ratio

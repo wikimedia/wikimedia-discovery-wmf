@@ -13,7 +13,7 @@
 mysql_connect(database, default_file = NULL, hostname = ifelse(database ==
   "log", "db1108.eqiad.wmnet", "analytics-store.eqiad.wmnet"))
 
-mysql_read(query, database, con = NULL)
+mysql_read(query, database = NULL, con = NULL)
 
 mysql_exists(database, table_name, con = NULL)
 
@@ -24,7 +24,7 @@ mysql_close(con)
 mysql_disconnect(con)
 }
 \arguments{
-\item{database}{name of the database to query}
+\item{database}{name of the database to query; \emph{optional} if passing a \code{con}}
 
 \item{default_file}{name of a config file containing username and password
 to use when connecting}

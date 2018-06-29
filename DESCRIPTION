@@ -1,8 +1,8 @@
 Package: wmf
 Type: Package
 Title: R Code for Wikimedia Foundation Internal Usage
-Version: 0.3.1
-Date: 2017-11-13
+Version: 0.4.0
+Date: 2018-06-29
 Authors@R: c(
     person("Mikhail", "Popov", email = "mikhail@wikimedia.org", role = c("aut", "cre")),
     person("Oliver", "Keyes", role = "aut", comment = "No longer employed at the Foundation"),
@@ -13,28 +13,32 @@ Description: This package contains functions made for Analysts at Wikimedia
 License: MIT + file LICENSE
 URL: https://phabricator.wikimedia.org/diffusion/1821/
 BugReports: https://phabricator.wikimedia.org/maniphest/task/create/?
-    projects=Discovery-Analysis
+    projects=Product-Analytics
 Depends: R (>= 3.1.0)
 Imports:
-    RMySQL,
-    Rcpp (>= 0.10.3),
     devtools,
-    urltools,
-    ggplot2,
     ggthemes (>= 3.4.0),
+    ggplot2,
+    jsonlite,
     lubridate,
     progress,
+    purrr,
+    pwr,
+    Rcpp (>= 0.10.3),
     readr,
-    pwr
+    RMySQL,
+    tibble,
+    urltools
 Suggests:
     lintr,
     testthat,
     knitr,
     rmarkdown,
-    dplyr
+    dplyr,
+    tidyr
 LinkingTo:
-    Rcpp,
     BH,
+    Rcpp,
     RcppArmadillo (>= 0.3.810)
 NeedsCompilation: yes
 SystemRequirements: C++11

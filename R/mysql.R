@@ -16,7 +16,7 @@ stop_on_empty <- function(data) {
 #'   tables in the Wikimedia cluster. Assumes the presence of a validly
 #'   formatted configuration file.
 #' @param query SQL query
-#' @param database name of the database to query
+#' @param database name of the database to query; *optional* if passing a `con`
 #' @param hostname name of the machine to connect to, which depends on whether
 #'   `query` is used to fetch from the **log** `database` (in which case
 #'   connect to "db1047.eqiad.wmnet") or a MediaWiki ("content") DB (in which
@@ -84,9 +84,9 @@ mysql_connect <- function(
 
 #' @rdname mysql
 #' @export
-mysql_read <- function(query, database, con = NULL) {
+mysql_read <- function(query, database = NULL, con = NULL) {
   already_connected <- !is.null(con)
-  if (!already_connected) {
+  if (!already_connected && !is.null(database)) {
     # Open a temporary connection to the db:
     con <- mysql_connect(database)
   }

@@ -4,7 +4,7 @@
 \alias{query_hive}
 \title{Query Hadoop cluster with Hive}
 \usage{
-query_hive(query, override_jars = FALSE)
+query_hive(query, override_jars = FALSE, heap_size = 1024)
 }
 \arguments{
 \item{query}{a Hive query}
@@ -15,6 +15,8 @@ query uses an updated version of an existing UDF and you want to load the
 JAR that you built yourself, set this to \code{TRUE}. See
 \href{https://wikitech.wikimedia.org/wiki/Analytics/Systems/Cluster/Hive/QueryUsingUDF#Testing_changes_to_existing_udf}{Testing changes to existing UDF}
 for more details.}
+
+\item{heap_size}{\code{HADOOP_HEAPSIZE}; default is 1024 (alt: 2048 or 4096)}
 }
 \value{
 a \code{data.frame} containing the results of the query, or a \code{TRUE} if

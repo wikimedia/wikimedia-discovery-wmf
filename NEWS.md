@@ -1,3 +1,8 @@
+wmf 0.4.0
+=========
+* Added `parse_json()`
+* Added `refine_eventlogs()`
+
 wmf 0.3.1
 =========
 * Switched host name from db1047.eqiad.wmnet to db1108.eqiad.wmnet per [T156844](https://phabricator.wikimedia.org/T156844)

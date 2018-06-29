@@ -95,3 +95,57 @@ read_sampled_log <- function(file, transparent = FALSE, nrows = NULL){
   data$referer <- urltools::url_decode(data$referer)
   return(data)
 }
+
+#' @title Refine EventLogging data
+#' @description Converts date-time and JSON columns, removes "event_" prefix
+#'   fom column names, and returns `tibble`s.
+#' @param el_data EventLogging data
+#' @param dt_cols character vector of timestamp and date-time column names to
+#'   parse; can also be a named list of parsing functions to apply on a
+#'   per-column basis, as [lubridate::ymd_hms()] is used by default
+#' @param json_cols character vector of JSON-containing column names that need
+#'   to be parsed; can also be a named list of parsing functions to apply on a
+#'   per-column basis, as [parse_json()] is used by default
+#' @return A `tibble` (see [tibble::`tibble-package`] for more info)
+#' @author Mikhail Popov
+#' @export
+refine_eventlogs <- function(el_data, dt_cols = NULL, json_cols = NULL) {
+  el_data <- tibble::as_tibble(el_data)
+  # Check column specifications and construct parsers if needed:
+  if (!is.null(dt_cols)) {
+    if (is.list(dt_cols)) {
+      per_col_dt <- all(vapply(dt_cols, is.function, TRUE))
+      if (!per_col_dt && any(vapply(dt_cols, is.function, TRUE))) {
+        stop("You have an incomplete 'dt_cols' (not all columns are assigned a date-time parser)")
+      }
+    } else {
+      per_col_dt <- FALSE
+    }
+    # Parse date-time columns:
+    if (!per_col_dt) {
+      dt_cols <- setNames(replicate(length(dt_cols), lubridate::ymd_hms), dt_cols)
+    }
+    for (dt_col in names(dt_cols)) {
+      el_data[[dt_col]] <- dt_cols[[dt_col]](el_data[[dt_col]])
+    }
+  }
+  if (!is.null(json_cols)) {
+    if (is.list(json_cols)) {
+      per_col_json <- all(vapply(json_cols, is.function, TRUE))
+      if (!per_col_json && any(vapply(json_cols, is.function, TRUE))) {
+        stop("You have an incomplete 'json_cols' (not all columns are assigned a JSON parser)")
+      }
+    } else {
+      per_col_json <- FALSE
+    }
+    # Parse JSON-containing columns:
+    if (!per_col_json) {
+      json_cols <- setNames(replicate(length(json_cols), parse_json), json_cols)
+    }
+    for (json_col in names(json_cols)) {
+      el_data[[json_col]] <- json_cols[[json_col]](el_data[[json_col]])
+    }
+  }
+  names(el_data) <- sub("^event_", "", names(el_data))
+  return(el_data)
+}

@@ -41,7 +41,6 @@ parse_json <- function(x) {
 #' @return A list with values as keys and keys as values.
 #' @examples
 #' invert_list(list(x = c(1, 2), y = c(2, 3)))
-#' # returns: list(`1` = "x", `2` = c("x", "y"), `3` = "y")
 #' @author Mikhail Popov
 #' @export
 invert_list <- function(x) {

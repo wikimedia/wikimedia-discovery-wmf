@@ -18,7 +18,6 @@ the keys become the values.
 }
 \examples{
 invert_list(list(x = c(1, 2), y = c(2, 3)))
-# returns: list(`1` = "x", `2` = c("x", "y"), `3` = "y")
 }
 \author{
 Mikhail Popov

@@ -7,7 +7,7 @@
 parse_json(x)
 }
 \arguments{
-\item{x}{character vector of JSON}
+\item{x}{A character vector of JSON}
 }
 \description{
 This is a shortcut for using \code{\link[purrr:map]{purrr::map()}} with

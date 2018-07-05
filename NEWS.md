@@ -1,3 +1,9 @@
+wmf 0.5.0
+=========
+* Added `invert_list()` for inverting keys and values in named lists
+* Added formatting helpers: `percent2()` and `pretty_num()`
+* Added [David Robinson's `geom_flat_violin`](https://gist.github.com/dgrtwo/eb7750e74997891d7c20)
+
 wmf 0.4.0
 =========
 * Added `parse_json()`

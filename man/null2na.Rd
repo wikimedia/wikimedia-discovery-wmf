@@ -7,7 +7,7 @@
 null2na(x)
 }
 \arguments{
-\item{x}{a list}
+\item{x}{A list}
 }
 \value{
 If any element from the input list is NULL, they will be turned into character

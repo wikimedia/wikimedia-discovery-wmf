@@ -4,7 +4,8 @@
 \alias{chisq_test_effect}
 \title{Chi-square Test Sample Size Given Effect}
 \usage{
-chisq_test_effect(w = NULL, groups = 2, sig_level = 0.05, power = 0.8)
+chisq_test_effect(w = NULL, groups = 2, sig_level = 0.05,
+  power = 0.8)
 }
 \arguments{
 \item{w}{Effect size you want the test to be able to detect. (Optional)}

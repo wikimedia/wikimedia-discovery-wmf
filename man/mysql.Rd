@@ -10,8 +10,8 @@
 \alias{mysql_disconnect}
 \title{Work with MySQL databases}
 \usage{
-mysql_connect(database, default_file = NULL, hostname = ifelse(database ==
-  "log", "db1108.eqiad.wmnet", "analytics-store.eqiad.wmnet"))
+mysql_connect(database, default_file = NULL, hostname = ifelse(database
+  == "log", "db1108.eqiad.wmnet", "analytics-store.eqiad.wmnet"))
 
 mysql_read(query, database = NULL, con = NULL)
 

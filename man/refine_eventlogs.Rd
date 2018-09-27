@@ -18,7 +18,7 @@ to be parsed; can also be a named list of parsing functions to apply on a
 per-column basis, as \code{\link[=parse_json]{parse_json()}} is used by default}
 }
 \value{
-A \code{tibble} (see \link[tibble:`tibble-package`]{tibble::\code{tibble-package}} for more info)
+A \code{tibble} (see \link[tibble:`tibble-package`]{tibble::tibble-package} for more info)
 }
 \description{
 Converts date-time and JSON columns, removes "event_" prefix

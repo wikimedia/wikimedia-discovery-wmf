@@ -1,3 +1,7 @@
+wmf 0.5.2
+=========
+* Added `use_beeline` argument in the `query_hive` function to use `beeline` instead of Hive CLI.
+
 wmf 0.5.0
 =========
 * Added `invert_list()` for inverting keys and values in named lists

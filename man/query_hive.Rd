@@ -4,7 +4,8 @@
 \alias{query_hive}
 \title{Query Hadoop cluster with Hive}
 \usage{
-query_hive(query, override_jars = FALSE, heap_size = 1024)
+query_hive(query, override_jars = FALSE, heap_size = 1024,
+  use_beeline = FALSE)
 }
 \arguments{
 \item{query}{a Hive query}
@@ -17,6 +18,8 @@ JAR that you built yourself, set this to \code{TRUE}. See
 for more details.}
 
 \item{heap_size}{\code{HADOOP_HEAPSIZE}; default is 1024 (alt: 2048 or 4096)}
+
+\item{use_beeline}{A logical flag indicating whether to use \code{beeline} to connect with Hive instead of \code{hive}. The default is \code{FALSE}.}
 }
 \value{
 a \code{data.frame} containing the results of the query, or a \code{TRUE} if

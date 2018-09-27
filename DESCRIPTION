@@ -1,8 +1,8 @@
 Package: wmf
 Type: Package
 Title: R Code for Wikimedia Foundation Internal Usage
-Version: 0.5.1
-Date: 2018-07-05
+Version: 0.5.2
+Date: 2018-09-27
 Authors@R: c(
     person("Mikhail", "Popov", email = "mikhail@wikimedia.org", role = c("aut", "cre")),
     person("Oliver", "Keyes", role = "aut", comment = "No longer employed at the Foundation"),
@@ -44,5 +44,5 @@ NeedsCompilation: yes
 SystemRequirements: C++11
 LazyData: TRUE
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 VignetteBuilder: knitr

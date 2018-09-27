@@ -4,8 +4,9 @@
 \alias{chisq_test_odds}
 \title{Chi-square Test Sample Size Given Odds Ratio}
 \usage{
-chisq_test_odds(odds_ratio = NULL, p_control = NULL, p_treatment = NULL,
-  power = NULL, conf_level = 0.95, sample_ratio = 1, visualize = FALSE)
+chisq_test_odds(odds_ratio = NULL, p_control = NULL,
+  p_treatment = NULL, power = NULL, conf_level = 0.95,
+  sample_ratio = 1, visualize = FALSE)
 }
 \arguments{
 \item{odds_ratio}{The expected odds ratio. That is, the ratio of the odds of

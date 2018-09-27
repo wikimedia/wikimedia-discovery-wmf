@@ -8,6 +8,7 @@
 #'   [Testing changes to existing UDF](https://wikitech.wikimedia.org/wiki/Analytics/Systems/Cluster/Hive/QueryUsingUDF#Testing_changes_to_existing_udf)
 #'   for more details.
 #' @param heap_size `HADOOP_HEAPSIZE`; default is 1024 (alt: 2048 or 4096)
+#' @param use_beeline A logical flag indicating whether to use `beeline` to connect with Hive instead of `hive`. The default is `FALSE`.
 #' @section escaping:
 #' `hive_query` works by running the query you provide through the CLI via a
 #'   [system()] call. As a result, single escapes for meaningful characters
@@ -29,7 +30,7 @@
 #' query_hive("USE wmf; DESCRIBE webrequest;")
 #' }
 #' @export
-query_hive <- function(query, override_jars = FALSE, heap_size = 1024) {
+query_hive <- function(query, override_jars = FALSE, heap_size = 1024, use_beeline = FALSE) {
 
     # Write query out to tempfile and create tempfile for results.
     query_dump <- tempfile()
@@ -44,7 +45,8 @@ query_hive <- function(query, override_jars = FALSE, heap_size = 1024) {
     # Query and read in the results
     try({
       system(paste0(
-        "export HADOOP_HEAPSIZE=", heap_size, " && hive -S ",
+        "export HADOOP_HEAPSIZE=", heap_size,
+        ifelse(use_beeline, " && beeline --silent=true ", " && hive -S "),
         ifelse(override_jars, "--hiveconf hive.aux.jars.path= ", ""),
         "-f ", query_dump, " 2> /dev/null", filters, " > ", results_dump
       ))

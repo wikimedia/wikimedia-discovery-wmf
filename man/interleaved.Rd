@@ -25,7 +25,8 @@ in \code{interleaved_data_b} have preference for ranking function "B".}
 \usage{
 interleaved_bootstraps(sessions, clicks, bootstraps = 1000L)
 
-interleaved_confint(sessions, clicks, bootstraps = 1000L, confidence = 0.95)
+interleaved_confint(sessions, clicks, bootstraps = 1000L,
+  confidence = 0.95)
 
 interleaved_preference(sessions, clicks)
 

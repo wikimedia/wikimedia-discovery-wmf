@@ -18,7 +18,9 @@
     - `interleaved_bootstraps` resamples sessions with replacement to yield bootstrapped sample of preferences
     - `interleaved_confint` uses `interleaved_bootstraps` and `stats::quantile` to yield a bootstrapped confidence interval
 
-More functions as people need them.
+Also includes [Wikimedia Design visual style colors](https://design.wikimedia.org/style-guide/visual-style_colors.html):
+
+![Color palettes included in the package based on Wikimedia Design Style Guide](palettes.png)
 
 ## Installation
 

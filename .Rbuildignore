@@ -11,3 +11,4 @@
 ^appveyor.yml$
 ^.*\.gitreview$
 ^\.lintr$
+^palettes\.png$

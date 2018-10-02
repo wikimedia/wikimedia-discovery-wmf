@@ -1,3 +1,7 @@
+wmf 0.6.0
+=========
+* Added color palettes based on [Wikimedia Design Style Guide](https://design.wikimedia.org/style-guide/)
+
 wmf 0.5.2
 =========
 * Added `use_beeline` argument in the `query_hive` function to use `beeline` instead of Hive CLI.

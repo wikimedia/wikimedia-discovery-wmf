@@ -1,8 +1,8 @@
 Package: wmf
 Type: Package
 Title: R Code for Wikimedia Foundation Internal Usage
-Version: 0.5.2
-Date: 2018-09-27
+Version: 0.6.0
+Date: 2018-10-02
 Authors@R: c(
     person("Mikhail", "Popov", email = "mikhail@wikimedia.org", role = c("aut", "cre")),
     person("Oliver", "Keyes", role = "aut", comment = "No longer employed at the Foundation"),

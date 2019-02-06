@@ -53,3 +53,29 @@ invert_list <- function(x) {
     return(names(y)[y])
   }))
 }
+
+#' @title Extract YMD components from a date
+#' @description Extracts a triple of year, month, day from date(s). If a single
+#'   date is provided, useful with `zeallot` package's multi-assignment
+#'   operator. If multiple dates are provided, a `tibble` of components (as
+#'   columns) are returned, which can be used with `purrr`'s multi-column
+#'   mappings.
+#' @param x `Date` vector
+#' @examples \dontrun{
+#' library(zeallot)
+#'
+#' c(year, month, day) %<-% extract_ymd(Sys.Date())
+#' }
+#' @export
+extract_ymd <- function(x) {
+  y <- lubridate::year(x)
+  m <- lubridate::month(x)
+  d <- lubridate::mday(x)
+  if (length(x) == 1) {
+    return(list(y, m, d))
+  } else if (length(x) > 1) {
+    return(tibble::tibble(year = y, month = m, day = d))
+  } else {
+    stop("must provide at least one date")
+  }
+}

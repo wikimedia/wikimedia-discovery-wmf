@@ -28,7 +28,9 @@ Imports:
     readr,
     RMySQL,
     tibble,
-    urltools
+    urltools,
+    magrittr,
+    zeallot
 Suggests:
     lintr,
     testthat,
@@ -44,5 +46,6 @@ NeedsCompilation: yes
 SystemRequirements: C++11
 LazyData: TRUE
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.1.0
+Encoding: UTF-8
 VignetteBuilder: knitr
+RoxygenNote: 6.1.1

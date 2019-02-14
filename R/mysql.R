@@ -1,14 +1,86 @@
-RMySQL_version <- function() {
-  # Returns 93 if the installed version of RMySQL is 0.9.3
-  return(as.numeric(paste0(unlist(utils::packageVersion("RMySQL")), collapse = "")))
-}
-
 # Ensure that we recognise and error on 0 rows
 stop_on_empty <- function(data) {
   if (nrow(data) == 0) {
     stop("No rows were returned from the database")
   }
   return(invisible())
+}
+
+# Check if the host machine is a remote WMF machine
+# e.g. stat100* or notebook100* as opposed to local
+is_wmnet <- function() {
+  suppressWarnings(domain <- system("hostname -d", intern = TRUE))
+  if (length(domain) == 0) {
+    return(FALSE)
+  } else {
+    return(grepl("\\.wmnet$", domain))
+  }
+}
+
+#' @title Update shard map
+#' @description Fetches the latest DB configuration from WMF's MediaWiki
+#'   Configuration for mapping
+#' @param dev logical flag; if true, will write to inst/extdata; updates the
+#'   installed map otherwise
+#' @export
+update_shardmap <- function(dev = FALSE) {
+  # Begin Exclude Linting
+  message("reading wmf's mediawiki db config")
+  url <- "https://phabricator.wikimedia.org/source/mediawiki-config/browse/master/wmf-config/db-eqiad.php?as=source&blame=off&view=raw"
+  db_config <- readLines(url)
+  # find where the shard config starts & ends:
+  sectionsByDB_start <- which(grepl("'sectionsByDB' => [", db_config, fixed = TRUE))
+  sectionsByDB_end <- which(grepl("],", db_config, fixed = TRUE))
+  sectionsByDB_end <- min(sectionsByDB_end[sectionsByDB_end > sectionsByDB_start])
+  # extract & parse the relevant data:
+  sectionsByDB <- gsub("[\t ',]", "", db_config[(sectionsByDB_start + 1):(sectionsByDB_end - 1)])
+  sectionsByDB <- sectionsByDB[sectionsByDB != "" & !grepl("^#", sectionsByDB)]
+  sectionsByDB <- strsplit(sectionsByDB, "=>")
+  sections_by_db <- purrr::map_dfr(
+    sectionsByDB[purrr::map_lgl(sectionsByDB, ~ .x[2] != "wikitech")],
+    ~ tibble::tibble(dbname = .x[1], shard = sub("^s([0-9]+)$", "\\1", .x[2]))
+  )
+  # s3 is the default shard for other wikis (as of 2019-02-13)
+  if (dev) {
+    file_path <- "inst/extdata/sections_by_db.csv"
+  } else {
+    file_path <- system.file("extdata", "sections_by_db.csv", package = "wmf")
+  }
+  message("saving sectionsByDB to ", file_path)
+  write.csv(sections_by_db, file_path)
+  # End Exclude Linting
+}
+
+#' @title Connection details
+#' @description Figure out connection details (host name and port) based on
+#'   database name.
+#' @param dbname e.g. "enwiki"; can be a vector of multiple database names
+#' @return a named `list` of `list(host, port)`s
+#' @references [wikitech:Data_access#MariaDB_replicas](https://wikitech.wikimedia.org/wiki/Analytics/Data_access#MariaDB_replicas)
+#' @export
+connection_details <- function(dbname) {
+  # 331 + the digit of the section in case of sX.
+  #   Example: s5 will be accessible to s5-analytics-replica.eqiad.wmnet:3315
+  # 3320 for x1. Example: x1-analytics-replica.eqiad.wmnet:3320
+  # 3350 for staging
+  shardmap <- system.file("extdata", "sections_by_db.csv", package = "wmf")
+  if (file.exists(shardmap)) {
+    sections_by_db <- read.csv(shardmap)
+  } else {
+    stop("no shard map found; use update_shardmap() to download latest shard mapping")
+  }
+  shards <- purrr::map(purrr::set_names(dbname, dbname), function(db) {
+    if (db %in% sections_by_db$dbname) {
+      shard <- sections_by_db$shard[sections_by_db$dbname == db]
+    } else {
+      shard <- 3
+    }
+    return(list(
+      host = sprintf("s%i-analytics-replica.eqiad.wmnet", shard),
+      port = as.numeric(sprintf("331%i", shard))
+    ))
+  })
+  return(shards)
 }
 
 #' @title Work with MySQL databases
@@ -19,8 +91,10 @@ stop_on_empty <- function(data) {
 #' @param database name of the database to query; *optional* if passing a `con`
 #' @param hostname name of the machine to connect to, which depends on whether
 #'   `query` is used to fetch from the **log** `database` (in which case
-#'   connect to "db1047.eqiad.wmnet") or a MediaWiki ("content") DB (in which
-#'   case connect to "analytics-store.eqiad.wmnet" as before)
+#'   connect to "db1108.eqiad.wmnet") or a MediaWiki ("content") DB, in which
+#'   case [connection_details()] is used to return the appropriate shard host
+#'   name and port based on the stored mapping (use [update_shardmap()] prior
+#'   to make sure the latest mapping is used)
 #' @param con MySQL connection returned by [mysql_connect()]; *optional* -- if
 #'   not provided, a temporary connection will be opened up
 #' @param table_name name of a table to check for the existence of or create,
@@ -33,8 +107,18 @@ stop_on_empty <- function(data) {
 #' @export
 mysql_connect <- function(
   database, default_file = NULL,
-  hostname = ifelse(database == "log", "db1108.eqiad.wmnet", "analytics-store.eqiad.wmnet")
+  hostname = NULL, port = NULL
 ) {
+  if (is.null(hostname)) {
+    if (database == "log") {
+      hostname <- "db1108.eqiad.wmnet"
+      if (is.null(port)) port <- 3306
+    } else {
+      con_deets <- connection_details(database)[[database]]
+      hostname <- con_deets$host
+      if (is.null(port)) port <- con_deets$port
+    }
+  }
   # Begin Exclude Linting
   if (is.null(default_file)) {
     possible_cnfs <- c(
@@ -66,18 +150,10 @@ mysql_connect <- function(
       }
     }
   }
-  if (RMySQL_version() > 93) {
-    con <- RMySQL::dbConnect(
-      drv = RMySQL::MySQL(), host = hostname,
-      dbname = database, default.file = default_file
-    )
-  } else {
-    # Using version RMySQL 0.9.3 or older:
-    con <- RMySQL::dbConnect(
-      drv = "MySQL", host = hostname,
-      dbname = database, default.file = default_file
-    )
-  }
+  con <- RMySQL::dbConnect(
+    drv = RMySQL::MySQL(), host = hostname, port = port,
+    dbname = database, default.file = default_file
+  )
   # End Exclude Linting
   return(con)
 }

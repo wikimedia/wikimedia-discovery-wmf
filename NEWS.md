@@ -1,3 +1,7 @@
+wmf 0.7.0
+=========
+* Updated for new sharded MariaDB replicas ([T212386](https://phabricator.wikimedia.org/T212386))
+
 wmf 0.6.0
 =========
 * Added color palettes based on [Wikimedia Design Style Guide](https://design.wikimedia.org/style-guide/)

@@ -10,8 +10,8 @@
 \alias{mysql_disconnect}
 \title{Work with MySQL databases}
 \usage{
-mysql_connect(database, default_file = NULL, hostname = ifelse(database
-  == "log", "db1108.eqiad.wmnet", "analytics-store.eqiad.wmnet"))
+mysql_connect(database, default_file = NULL, hostname = NULL,
+  port = NULL)
 
 mysql_read(query, database = NULL, con = NULL)
 
@@ -31,8 +31,10 @@ to use when connecting}
 
 \item{hostname}{name of the machine to connect to, which depends on whether
 \code{query} is used to fetch from the \strong{log} \code{database} (in which case
-connect to "db1047.eqiad.wmnet") or a MediaWiki ("content") DB (in which
-case connect to "analytics-store.eqiad.wmnet" as before)}
+connect to "db1108.eqiad.wmnet") or a MediaWiki ("content") DB, in which
+case \code{\link[=connection_details]{connection_details()}} is used to return the appropriate shard host
+name and port based on the stored mapping (use \code{\link[=update_shardmap]{update_shardmap()}} prior
+to make sure the latest mapping is used)}
 
 \item{query}{SQL query}
 

@@ -27,13 +27,15 @@ Also includes [Wikimedia Design visual style colors](https://design.wikimedia.or
 This package requires compilation with a compiler that supports [C++11](https://en.wikipedia.org/wiki/C%2B%2B11). `g++-5` and `clang++` 3.3 have (near-)complete C++11 support. `g++-6` and `g++-7` are pretty common on Linux and if you have the most recent version of Command Line Tools for Xcode (via `xcode-select --install`) for macOS, you should have `clang++` 5.0.0 (or later), which includes full C++11 support.
 
 ```R
-# install.packages("devtools", repos = c(CRAN = "https://cran.rstudio.com/"))
+# install.packages("remotes", repos = c(CRAN = "https://cran.rstudio.com/"))
 
-devtools::install_git("https://gerrit.wikimedia.org/r/wikimedia/discovery/wmf", build_vignettes = TRUE)
+remotes::install_git("https://gerrit.wikimedia.org/r/wikimedia/discovery/wmf", build_vignettes = TRUE)
 
 # Alternatively, you can install from GitHub mirror:
-devtools::install_github("wikimedia/wikimedia-discovery-wmf", build_vignettes = TRUE)
+remotes::install_github("wikimedia/wikimedia-discovery-wmf", build_vignettes = TRUE)
 ```
+
+To update: `remotes::update_packages("wmf")`
 
 ## Maintainers
 

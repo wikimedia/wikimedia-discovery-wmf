@@ -4,10 +4,13 @@
 \alias{connection_details}
 \title{Connection details}
 \usage{
-connection_details(dbname)
+connection_details(dbname, use_x1 = FALSE)
 }
 \arguments{
 \item{dbname}{e.g. "enwiki"; can be a vector of multiple database names}
+
+\item{use_x1}{logical flag; use if querying an extension-related table that
+is hosted on x1 (e.g. \code{echo_*} tables); default \code{FALSE}}
 }
 \value{
 a named \code{list} of \code{list(host, port)}s

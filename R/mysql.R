@@ -55,10 +55,12 @@ update_shardmap <- function(dev = FALSE) {
 #' @description Figure out connection details (host name and port) based on
 #'   database name.
 #' @param dbname e.g. "enwiki"; can be a vector of multiple database names
+#' @param use_x1 logical flag; use if querying an extension-related table that
+#'   is hosted on x1 (e.g. `echo_*` tables); default `FALSE`
 #' @return a named `list` of `list(host, port)`s
 #' @references [wikitech:Data_access#MariaDB_replicas](https://wikitech.wikimedia.org/wiki/Analytics/Data_access#MariaDB_replicas)
 #' @export
-connection_details <- function(dbname) {
+connection_details <- function(dbname, use_x1 = FALSE) {
   # 331 + the digit of the section in case of sX.
   #   Example: s5 will be accessible to s5-analytics-replica.eqiad.wmnet:3315
   # 3320 for x1. Example: x1-analytics-replica.eqiad.wmnet:3320
@@ -70,15 +72,19 @@ connection_details <- function(dbname) {
     stop("no shard map found; use update_shardmap() to download latest shard mapping")
   }
   shards <- purrr::map(purrr::set_names(dbname, dbname), function(db) {
-    if (db %in% sections_by_db$dbname) {
-      shard <- sections_by_db$shard[sections_by_db$dbname == db]
+    if (use_x1) {
+      return(list(host = "x1-analytics-replica.eqiad.wmnet", port = 3320))
     } else {
-      shard <- 3
+      if (db %in% sections_by_db$dbname) {
+        shard <- sections_by_db$shard[sections_by_db$dbname == db]
+      } else {
+        shard <- 3
+      }
+      return(list(
+        host = sprintf("s%i-analytics-replica.eqiad.wmnet", shard),
+        port = as.numeric(sprintf("331%i", shard))
+      ))
     }
-    return(list(
-      host = sprintf("s%i-analytics-replica.eqiad.wmnet", shard),
-      port = as.numeric(sprintf("331%i", shard))
-    ))
   })
   return(shards)
 }
@@ -89,6 +95,8 @@ connection_details <- function(dbname) {
 #'   formatted configuration file.
 #' @param query SQL query
 #' @param database name of the database to query; *optional* if passing a `con`
+#' @param use_x1 logical flag; use if querying an extension-related table that
+#'   is hosted on x1 (e.g. `echo_*` tables); default `FALSE`
 #' @param hostname name of the machine to connect to, which depends on whether
 #'   `query` is used to fetch from the **log** `database` (in which case
 #'   connect to "db1108.eqiad.wmnet") or a MediaWiki ("content") DB, in which
@@ -101,20 +109,45 @@ connection_details <- function(dbname) {
 #'   depending on the function
 #' @param default_file name of a config file containing username and password
 #'   to use when connecting
+#' @examples \dontrun{
+#' # Connection details (which shard to connect to) are fetched automatically:
+#' mysql_read("SELECT * FROM image LIMIT 100", "commonswiki")
+#' mysql_read("SELECT * FROM wbc_entity_usage LIMIT 100", "wikidatawiki")
+#'
+#' # Echo extension tables are on the x1 host:
+#' mysql_read("SELECT *
+#'   FROM echo_event
+#'   LEFT JOIN echo_notification
+#'     ON echo_event.event_id = echo_notification.notification_event
+#'   LIMIT 10;",
+#' "enwiki", use_x1 = TRUE)
+#'
+#' # If querying multiple databases in the same shard
+#' # a shared connection may be used:
+#' con <- mysql_connect("frwiki")
+#' results <- purrr::map(
+#'   c("frwiki", "jawiki"),
+#'   mysql_read,
+#'   query = "SELECT...",
+#'   con = con
+#' )
+#' mysql_disconnect(con)
+#' }
 #' @name mysql
 #' @rdname mysql
 #' @seealso [query_hive()] or [global_query()]
 #' @export
 mysql_connect <- function(
-  database, default_file = NULL,
-  hostname = NULL, port = NULL
+  database, use_x1 = FALSE,
+  default_file = NULL, hostname = NULL, port = NULL
 ) {
   if (is.null(hostname)) {
     if (database == "log") {
+      if (use_x1) stop("using x1 does not make sense when connecting to 'log' db")
       hostname <- "db1108.eqiad.wmnet"
       if (is.null(port)) port <- 3306
     } else {
-      con_deets <- connection_details(database)[[database]]
+      con_deets <- connection_details(database, use_x1 = use_x1)[[database]]
       hostname <- con_deets$host
       if (is.null(port)) port <- con_deets$port
     }
@@ -160,11 +193,12 @@ mysql_connect <- function(
 
 #' @rdname mysql
 #' @export
-mysql_read <- function(query, database = NULL, con = NULL) {
+mysql_read <- function(query, database = NULL, use_x1 = NULL, con = NULL) {
   already_connected <- !is.null(con)
   if (!already_connected && !is.null(database)) {
     # Open a temporary connection to the db:
-    con <- mysql_connect(database)
+    if (is.null(use_x1)) use_x1 <- FALSE
+    con <- mysql_connect(database, use_x1 = use_x1)
   }
   # Begin Exclude Linting
   to_fetch <- RMySQL::dbSendQuery(con, query)
@@ -182,11 +216,12 @@ mysql_read <- function(query, database = NULL, con = NULL) {
 
 #' @rdname mysql
 #' @export
-mysql_exists <- function(database, table_name, con = NULL) {
+mysql_exists <- function(database, table_name, use_x1 = NULL, con = NULL) {
   already_connected <- !is.null(con)
   if (!already_connected) {
     # Open a temporary connection to the db:
-    con <- mysql_connect(database)
+    if (is.null(use_x1)) use_x1 <- FALSE
+    con <- mysql_connect(database, use_x1 = use_x1)
   }
   # Grab the results and close off:
   # Begin Exclude Linting
@@ -204,11 +239,12 @@ mysql_exists <- function(database, table_name, con = NULL) {
 #' @param ... additional arguments to pass to `dbWriteTable`
 #' @rdname mysql
 #' @export
-mysql_write <- function(x, database, table_name, con = NULL, ...){
+mysql_write <- function(x, database, table_name, use_x1 = NULL, con = NULL, ...){
   already_connected <- !is.null(con)
   if (!already_connected) {
     # Open a temporary connection to the db:
-    con <- mysql_connect(database)
+    if (is.null(use_x1)) use_x1 <- FALSE
+    con <- mysql_connect(database, use_x1 = use_x1)
   }
   # Write:
   # Begin Exclude Linting

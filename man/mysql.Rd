@@ -10,14 +10,14 @@
 \alias{mysql_disconnect}
 \title{Work with MySQL databases}
 \usage{
-mysql_connect(database, default_file = NULL, hostname = NULL,
-  port = NULL)
+mysql_connect(database, use_x1 = FALSE, default_file = NULL,
+  hostname = NULL, port = NULL)
 
-mysql_read(query, database = NULL, con = NULL)
+mysql_read(query, database = NULL, use_x1 = NULL, con = NULL)
 
-mysql_exists(database, table_name, con = NULL)
+mysql_exists(database, table_name, use_x1 = NULL, con = NULL)
 
-mysql_write(x, database, table_name, con = NULL, ...)
+mysql_write(x, database, table_name, use_x1 = NULL, con = NULL, ...)
 
 mysql_close(con)
 
@@ -25,6 +25,9 @@ mysql_disconnect(con)
 }
 \arguments{
 \item{database}{name of the database to query; \emph{optional} if passing a \code{con}}
+
+\item{use_x1}{logical flag; use if querying an extension-related table that
+is hosted on x1 (e.g. \code{echo_*} tables); default \code{FALSE}}
 
 \item{default_file}{name of a config file containing username and password
 to use when connecting}
@@ -52,6 +55,32 @@ depending on the function}
 Read from, write to, and check data from the MySQL databases and
 tables in the Wikimedia cluster. Assumes the presence of a validly
 formatted configuration file.
+}
+\examples{
+\dontrun{
+# Connection details (which shard to connect to) are fetched automatically:
+mysql_read("SELECT * FROM image LIMIT 100", "commonswiki")
+mysql_read("SELECT * FROM wbc_entity_usage LIMIT 100", "wikidatawiki")
+
+# Echo extension tables are on the x1 host:
+mysql_read("SELECT *
+  FROM echo_event
+  LEFT JOIN echo_notification
+    ON echo_event.event_id = echo_notification.notification_event
+  LIMIT 10;",
+"enwiki", use_x1 = TRUE)
+
+# If querying multiple databases in the same shard
+# a shared connection may be used:
+con <- mysql_connect("frwiki")
+results <- purrr::map(
+  c("frwiki", "jawiki"),
+  mysql_read,
+  query = "SELECT...",
+  con = con
+)
+mysql_disconnect(con)
+}
 }
 \seealso{
 \code{\link[=query_hive]{query_hive()}} or \code{\link[=global_query]{global_query()}}

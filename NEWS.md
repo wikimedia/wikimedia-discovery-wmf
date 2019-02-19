@@ -1,6 +1,7 @@
-wmf 0.7.0
+wmf 0.7.1
 =========
 * Updated for new sharded MariaDB replicas ([T212386](https://phabricator.wikimedia.org/T212386))
+* Updated for x1 replica (cf. [T172410#4965383](https://phabricator.wikimedia.org/T172410#4965383))
 
 wmf 0.6.0
 =========

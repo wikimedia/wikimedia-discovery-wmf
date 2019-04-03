@@ -18,3 +18,6 @@ What it says on the tin; generates a
 \code{WHERE year = foo AND month = bar}
 that can then be combined with other elements to form a Hive query.
 }
+\seealso{
+\code{\link[=extract_ymd]{extract_ymd()}}
+}

@@ -8,14 +8,16 @@
 #'   [Testing changes to existing UDF](https://wikitech.wikimedia.org/wiki/Analytics/Systems/Cluster/Hive/QueryUsingUDF#Testing_changes_to_existing_udf)
 #'   for more details.
 #' @param heap_size `HADOOP_HEAPSIZE`; default is 1024 (alt: 2048 or 4096)
-#' @param use_beeline A logical flag indicating whether to use `beeline` to connect with Hive instead of `hive`. The default is `FALSE`.
-#' @section escaping:
+#' @param use_nice Whether to use `nice` for less greedy CPU usage in a multi-user environment. The default is `TRUE`.
+#' @param use_ionice Whether to use `ionice` for less greedy I/O in a multi-user environment. The default is `TRUE`.
+#' @param use_beeline Whether to use `beeline` to connect with Hive instead of `hive`. The default is `FALSE`.
+#' @section Escaping:
 #' `hive_query` works by running the query you provide through the CLI via a
 #'   [system()] call. As a result, single escapes for meaningful characters
 #'   (such as quotes) within the query will not work: R will interpret them
 #'   only as escaping that character /within R/. Double escaping (\\\) is thus
 #'   necessary, in the same way that it is for regular expressions.
-#' @return a `data.frame` containing the results of the query, or a `TRUE` if
+#' @return A `data.frame` containing the results of the query, or a `TRUE` if
 #'   the user has chosen to write straight to file.
 #' @section Handling our hadoop/hive setup:
 #' The `webrequests` table is documented [on Wikitech](https://wikitech.wikimedia.org/wiki/Analytics/Systems/Cluster/Hive),
@@ -30,7 +32,8 @@
 #' query_hive("USE wmf; DESCRIBE webrequest;")
 #' }
 #' @export
-query_hive <- function(query, override_jars = FALSE, heap_size = 1024, use_beeline = FALSE) {
+query_hive <- function(query, override_jars = FALSE, heap_size = 1024,
+                       use_nice = TRUE, use_ionice = TRUE, use_beeline = FALSE) {
 
     # Write query out to tempfile and create tempfile for results.
     query_dump <- tempfile()
@@ -45,8 +48,10 @@ query_hive <- function(query, override_jars = FALSE, heap_size = 1024, use_beeli
     # Query and read in the results
     try({
       system(paste0(
-        "export HADOOP_HEAPSIZE=", heap_size,
-        ifelse(use_beeline, " && beeline --silent=true ", " && hive -S "),
+        "export HADOOP_HEAPSIZE=", heap_size, " && ",
+        ifelse(use_nice, "nice ", ""),
+        ifelse(use_ionice, "ionice ", ""),
+        ifelse(use_beeline, " beeline --silent=true ", "hive -S "),
         ifelse(override_jars, "--hiveconf hive.aux.jars.path= ", ""),
         "-f ", query_dump, " 2> /dev/null", filters, " > ", results_dump
       ))
@@ -67,8 +72,10 @@ query_hive <- function(query, override_jars = FALSE, heap_size = 1024, use_beeli
 #' @param date if `NULL`, yesterday will be used
 #' @return a list containing two elements: "date_clause" and "date"; the
 #'   returning of the date allows you to include it
+#' @seealso [extract_ymd()]
 #' @export
 date_clause <- function(date) {
+  warning("Deprecated; recommended to use `c(year, month, day) %<-% wmf::extract_ymd(date)` instead")
   if (is.null(date)) {
     date <- Sys.Date() - 1
   }

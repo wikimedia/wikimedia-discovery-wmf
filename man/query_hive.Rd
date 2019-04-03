@@ -5,7 +5,7 @@
 \title{Query Hadoop cluster with Hive}
 \usage{
 query_hive(query, override_jars = FALSE, heap_size = 1024,
-  use_beeline = FALSE)
+  use_nice = TRUE, use_ionice = TRUE, use_beeline = FALSE)
 }
 \arguments{
 \item{query}{a Hive query}
@@ -19,16 +19,20 @@ for more details.}
 
 \item{heap_size}{\code{HADOOP_HEAPSIZE}; default is 1024 (alt: 2048 or 4096)}
 
-\item{use_beeline}{A logical flag indicating whether to use \code{beeline} to connect with Hive instead of \code{hive}. The default is \code{FALSE}.}
+\item{use_nice}{Whether to use \code{nice} for less greedy CPU usage in a multi-user environment. The default is \code{TRUE}.}
+
+\item{use_ionice}{Whether to use \code{ionice} for less greedy I/O in a multi-user environment. The default is \code{TRUE}.}
+
+\item{use_beeline}{Whether to use \code{beeline} to connect with Hive instead of \code{hive}. The default is \code{FALSE}.}
 }
 \value{
-a \code{data.frame} containing the results of the query, or a \code{TRUE} if
+A \code{data.frame} containing the results of the query, or a \code{TRUE} if
 the user has chosen to write straight to file.
 }
 \description{
 Queries Hive
 }
-\section{escaping}{
+\section{Escaping}{
 
 \code{hive_query} works by running the query you provide through the CLI via a
 \code{\link[=system]{system()}} call. As a result, single escapes for meaningful characters

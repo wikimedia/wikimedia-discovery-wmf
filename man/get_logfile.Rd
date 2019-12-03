@@ -25,5 +25,5 @@ retrieve a particular date range of files through the "earliest" and
 "latest" arguments.
 }
 \author{
-Oliver Keyes
+Os Keyes
 }

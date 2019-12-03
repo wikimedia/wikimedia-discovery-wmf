@@ -36,9 +36,3 @@ test_that("chisq_test returns errors when it should", {
   expect_error(chisq_test_effect(w = 0.1, power = 0.001))
   expect_error(chisq_test_effect(w = 0.1, sig_level = 2))
 })
-
-test_that("exact_binom calculates appropriate sample sizes", {
-  expect_equal(exact_binom(0.75, 0.03, alpha = 0.05, power = 0.9, two_tail = TRUE), 2105)
-  expect_equal(exact_binom(0.75, 0.03, alpha = 0.05, power = 0.9, two_tail = FALSE), 1716)
-  expect_equal(exact_binom(0.75, 0.01, alpha = 0.05, power = 0.9, two_tail = TRUE), 19394)
-})

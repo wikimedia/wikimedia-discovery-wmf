@@ -9,7 +9,7 @@
 #' @rdname FiveThirtyNine
 #' @import ggplot2
 #' @import ggthemes
-#' @author Oliver Keyes
+#' @author Os Keyes
 #' @export
 theme_fivethirtynine <- function(base_size = 12, base_family = "sans") {
   theme_foundation(base_size = base_size, base_family = base_family) +
@@ -109,7 +109,7 @@ theme_facet <- function(base_size = 12, base_family = "", border = TRUE, clean_x
 #' @export
 geom_flat_violin <- function(mapping = NULL, data = NULL, stat = "ydensity",
                              position = "dodge", trim = TRUE, scale = "area",
-                             show.legend = NA, inherit.aes = TRUE, ...) {
+                             show.legend = NA, inherit.aes = TRUE, ...) { # nolint
   return(ggplot2::layer(
     data = data,
     mapping = mapping,
@@ -126,6 +126,7 @@ geom_flat_violin <- function(mapping = NULL, data = NULL, stat = "ydensity",
   ))
 }
 
+# nolint start
 "%||%" <- function(a, b) {
   if (!is.null(a)) {
     return(a)
@@ -174,3 +175,4 @@ GeomFlatViolin <- ggplot2::ggproto(
   default_aes = aes(weight = 1, colour = "grey20", fill = "white", size = 0.5, alpha = NA, linetype = "solid"),
   required_aes = c("x", "y")
 )
+# nolint end

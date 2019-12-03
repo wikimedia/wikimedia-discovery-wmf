@@ -24,5 +24,5 @@ for converting MediaWiki timestamps into \code{POSIXlt} timestamps, or
 \code{\link[=query_hive]{query_hive()}} for accessing the Hive datastore
 }
 \author{
-Oliver Keyes
+Os Keyes
 }

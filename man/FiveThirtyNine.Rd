@@ -21,5 +21,5 @@ allow for long titles) back in and does a small amount of reduction of the
 overall plot size to avoid an absolute ton of extraneous spacing.
 }
 \author{
-Oliver Keyes
+Os Keyes
 }

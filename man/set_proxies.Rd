@@ -10,13 +10,3 @@ set_proxies()
 Sets the HTTP and HTTPS proxies when running R on
 Wikimedia machines.
 }
-\examples{
-\dontrun{
-# This will fail in the cluster
-devtools::install_github("ironholds/urltools")
-
-# This will work
-set_proxies()
-devtools::install_github("ironholds/urltools")
-}
-}

@@ -65,7 +65,7 @@ colors_accent <- function(n = 3) {
     "Accent10" = "#2a4b8d",
     "Accent90" = "#eaf3ff"
   )
-  return(colors[1:n])
+  return(colors[seq_len(n)])
 }
 
 #' @rdname palettes
@@ -84,15 +84,15 @@ colors_utility <- function(n = 9) {
     "Yellow30" = "#ac6600"
   )
   if (n < 4) {
-    return(colors[c("Red50", "Green50", "Yellow50")][1:n])
+    return(colors[c("Red50", "Green50", "Yellow50")][seq_len(n)])
   } else if (n > 3 && n <= 6) {
     return(colors[c(
       "Red90", "Red30",
       "Green90", "Green30",
       "Yellow50", "Yellow30"
-    )][1:n])
+    )][seq_len(n)])
   } else {
-    return(colors[1:n])
+    return(colors[seq_len(n)])
   }
 }
 
@@ -111,9 +111,9 @@ colors_discrete <- function(n = 8) {
     "Yellow30" = "#ac6600"
   )
   if (n < 5) {
-    return(colors[c("Red50", "Green50", "Accent50", "Yellow50")][1:n])
+    return(colors[c("Red50", "Green50", "Accent50", "Yellow50")][seq_len(n)])
   } else {
-    return(colors[1:n])
+    return(colors[seq_len(n)])
   }
 }
 
@@ -132,7 +132,7 @@ display_palettes <- function() {
     ~ data.frame(
       name = names(.x),
       color = unname(.x),
-      n = 1:length(.x),
+      n = seq_len(length(.x)),
       stringsAsFactors = FALSE),
     .id = "palette"
   )

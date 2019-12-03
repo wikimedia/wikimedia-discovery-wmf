@@ -3,7 +3,6 @@
 \docType{package}
 \name{wmf}
 \alias{wmf}
-\alias{wmf-package}
 \title{wmf: R Code for Wikimedia Foundation Internal Usage}
 \description{
 This package contains functions made for Analysts at Wikimedia

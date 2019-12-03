@@ -4,8 +4,14 @@
 \alias{query_hive}
 \title{Query Hadoop cluster with Hive}
 \usage{
-query_hive(query, override_jars = FALSE, heap_size = 1024,
-  use_nice = TRUE, use_ionice = TRUE, use_beeline = FALSE)
+query_hive(
+  query,
+  override_jars = FALSE,
+  heap_size = 1024,
+  use_nice = TRUE,
+  use_ionice = TRUE,
+  use_beeline = FALSE
+)
 }
 \arguments{
 \item{query}{a Hive query}
@@ -14,7 +20,7 @@ query_hive(query, override_jars = FALSE, heap_size = 1024,
 Hive on WMF's analytics machine(s) loads some JARs by default, so if your
 query uses an updated version of an existing UDF and you want to load the
 JAR that you built yourself, set this to \code{TRUE}. See
-\href{https://wikitech.wikimedia.org/wiki/Analytics/Systems/Cluster/Hive/QueryUsingUDF#Testing_changes_to_existing_udf}{Testing changes to existing UDF}
+\href{https://wikitech.wikimedia.org/wiki/Analytics/Systems/Cluster/Hive/QueryUsingUDF#Testing_changes_to_existing_udf}{Testing changes to existing UDF} # nolint
 for more details.}
 
 \item{heap_size}{\code{HADOOP_HEAPSIZE}; default is 1024 (alt: 2048 or 4096)}
@@ -37,7 +43,7 @@ Queries Hive
 \code{hive_query} works by running the query you provide through the CLI via a
 \code{\link[=system]{system()}} call. As a result, single escapes for meaningful characters
 (such as quotes) within the query will not work: R will interpret them
-only as escaping that character /within R/. Double escaping (\) is thus
+only as escaping that character /within R/. Double escaping (\\\) is thus
 necessary, in the same way that it is for regular expressions.
 }
 

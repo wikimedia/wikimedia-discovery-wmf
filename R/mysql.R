@@ -26,8 +26,9 @@ is_wmnet <- function() {
 update_shardmap <- function(dev = FALSE) {
   # Begin Exclude Linting
   message("reading wmf's mediawiki db config")
-  url <- "https://phabricator.wikimedia.org/source/mediawiki-config/browse/master/wmf-config/db-eqiad.php?as=source&blame=off&view=raw"
+  url <- "https://phabricator.wikimedia.org/source/mediawiki-config/browse/master/wmf-config/db-eqiad.php?as=source&blame=off&view=raw" # nolint
   db_config <- readLines(url)
+  # nolint start
   # find where the shard config starts & ends:
   sectionsByDB_start <- which(grepl("'sectionsByDB' => [", db_config, fixed = TRUE))
   sectionsByDB_end <- which(grepl("],", db_config, fixed = TRUE))
@@ -40,6 +41,7 @@ update_shardmap <- function(dev = FALSE) {
     sectionsByDB[purrr::map_lgl(sectionsByDB, ~ .x[2] != "wikitech")],
     ~ tibble::tibble(dbname = .x[1], shard = sub("^s([0-9]+)$", "\\1", .x[2]))
   )
+  # nolint end
   # s3 is the default shard for other wikis (as of 2019-02-13)
   if (dev) {
     file_path <- "inst/extdata/sections_by_db.csv"
@@ -58,7 +60,9 @@ update_shardmap <- function(dev = FALSE) {
 #' @param use_x1 logical flag; use if querying an extension-related table that
 #'   is hosted on x1 (e.g. `echo_*` tables); default `FALSE`
 #' @return a named `list` of `list(host, port)`s
+# nolint start
 #' @references [wikitech:Data_access#MariaDB_replicas](https://wikitech.wikimedia.org/wiki/Analytics/Data_access#MariaDB_replicas)
+# nolint end
 #' @export
 connection_details <- function(dbname, use_x1 = FALSE) {
   # 331 + the digit of the section in case of sX.
@@ -239,7 +243,7 @@ mysql_exists <- function(database, table_name, use_x1 = NULL, con = NULL) {
 #' @param ... additional arguments to pass to `dbWriteTable`
 #' @rdname mysql
 #' @export
-mysql_write <- function(x, database, table_name, use_x1 = NULL, con = NULL, ...){
+mysql_write <- function(x, database, table_name, use_x1 = NULL, con = NULL, ...) {
   already_connected <- !is.null(con)
   if (!already_connected) {
     # Open a temporary connection to the db:

@@ -3,6 +3,4 @@
 #'   Foundation, but can be used by people outside of the Foundation.
 #' @docType package
 #' @name wmf
-#' @useDynLib wmf
-#' @importFrom Rcpp sourceCpp
 NULL

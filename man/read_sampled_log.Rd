@@ -41,5 +41,5 @@ The sampled logs are returned as a data.frame with 16 columns - see
 the \strong{Value} documentation.
 }
 \author{
-Oliver Keyes
+Os Keyes
 }

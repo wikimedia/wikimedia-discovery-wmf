@@ -1,3 +1,4 @@
+# nolint start
 oddsRatio <- function(p_treatment, p_control) {
   return((p_treatment / (1 - p_treatment)) / (p_control / (1 - p_control)))
 }
@@ -7,6 +8,7 @@ pTreatment <- function(p_control, odds_ratio) {
 pControl <- function(p_treatment, odds_ratio) {
   return(1 / ((odds_ratio * ((1 / p_treatment) - 1)) + 1))
 }
+# nolint end
 
 #' @title Chi-square Test Sample Size Given Odds Ratio
 #' @description Calculates sample size for chi-squared test of independence
@@ -20,22 +22,23 @@ pControl <- function(p_treatment, odds_ratio) {
 #'   Optional but see **Details**.
 #' @param power The ability of the test to detect an effect where there is one.
 #'   Power = 1 - Prob(Type 2 error). Optional. See **Value** for details.
-#' @param conf_level Desired confidence level. Defaults to 95\%.
+#' @param conf_level Desired confidence level. Defaults to 95%.
 #' @param sample_ratio Ratio of test group to control group. 1 is even split.
 #' @param visualize Whether to plot power or prevalence of outcome in the
 #'   control group vs sample size. Can be used to help make a decision.
-#' @details The function only needs to know two of the following three:
-#'   `odds_ratio`, `p_control`, and `p_treatment`. If given
-#'   all three, it will check to make sure the odds ratio is correct. It
-#'   will figure out the missing third value from the other two.
-#' @return If `power` was not provided, returns vector containing
-#'   possible power values and the appropriate sample size for each \%.
-#'   If all values were provided, returns a single sample size estimate.
+#' @section Details:
+#' The function only needs to know two of the following three: `odds_ratio`,
+#' `p_control`, and `p_treatment`. If given all three, it will check to make
+#' sure the odds ratio is correct. It will figure out the missing third value
+#' from the other two.
 #' @section References:
 #' Wang, H., Chow, S.-C., & Li, G. (2002). On sample size calculation based on
 #' odds ratio in clinical trials. *Journal of Biopharmaceutical
 #' Statistics*, **12**(4), 471-483.
 #' [doi:10.1081/BIP-120016231](http://doi.org/10.1081/BIP-120016231)
+#' @return If `power` was not provided, returns vector containing
+#'   possible power values and the appropriate sample size for each %.
+#'   If all values were provided, returns a single sample size estimate.
 #' @examples
 #' chisq_test_odds(p_treatment = 0.4, p_control = 0.25, power = 0.8)
 #' chisq_test_odds(odds_ratio = 2, p_control = 0.4, power = c(0.8, 0.9, 0.95))
@@ -56,10 +59,10 @@ chisq_test_odds <- function(
   # Begin Exclude Linting
   # Checks
   power_missing <- is.null(power)
-  pC_missing <- is.null(p_control)
-  pT_missing <- is.null(p_treatment)
-  oR_missing <- is.null(odds_ratio)
-  if ( (oR_missing + pC_missing + pT_missing) > 1) {
+  prob_control_missing <- is.null(p_control)
+  prob_treatment_missing <- is.null(p_treatment)
+  odds_ratio_missing <- is.null(odds_ratio)
+  if ((odds_ratio_missing + prob_control_missing + prob_treatment_missing) > 1) {
     stop("Only one of {odds_ratio, p_control, p_treatment} can be missing.")
   }
   # Imputations (Part 1)
@@ -67,11 +70,11 @@ chisq_test_odds <- function(
     power <- seq(0.5, 0.99, 0.01)
   }
   # Imputations (Part 2)
-  if (pC_missing) {
+  if (prob_control_missing) {
     p_control <- pControl(p_treatment, odds_ratio)
-  } else if (pT_missing) {
+  } else if (prob_treatment_missing) {
     p_treatment <- pTreatment(p_control, odds_ratio)
-  } else if (oR_missing) {
+  } else if (odds_ratio_missing) {
     odds_ratio <- oddsRatio(p_treatment, p_control)
   }
   # End Exclude Linting
@@ -121,7 +124,7 @@ chisq_test_odds <- function(
 #' @param sig_level Probability of Type 1 error. Usually called alpha.
 #'  Defaults to 0.05.
 #' @param power Ability to detect the effect. (1 - probability of Type 2 error)
-#'  Defaults to 80\%.
+#'  Defaults to 80%.
 #' @return If `w` was not provided, returns a data frame containing
 #'  possible values of w and the corresponding sample size estimates.
 #' @examples

@@ -20,7 +20,7 @@ Formatting utilities
 }
 \details{
 \itemize{
-\item \code{percent2}: multiply by one hundred, display percent sign, clear "NA%"'s,
+\item \code{percent2}: multiply by one hundred, display percent sign, clear "NA\%"'s,
 and optionally prepend a "+" to positive percentages
 \item \code{pretty_num}: shortcut to formatting 1e6 as 1,000,000
 }

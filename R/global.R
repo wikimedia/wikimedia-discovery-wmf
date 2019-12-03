@@ -6,7 +6,7 @@
 #' @param query the SQL query you want to run
 #' @param project_type what class of wiki (e.g. "wikisource", "wiktionary")
 #'   you want to run against. Set to "all" by default.
-#' @author Oliver Keyes
+#' @author Os Keyes
 #' @seealso [mysql_read()] for querying an individual db, [from_mediawiki()]
 #'   for converting MediaWiki timestamps into `POSIXlt` timestamps, or
 #'   [query_hive()] for accessing the Hive datastore

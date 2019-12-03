@@ -4,9 +4,15 @@
 \alias{chisq_test_odds}
 \title{Chi-square Test Sample Size Given Odds Ratio}
 \usage{
-chisq_test_odds(odds_ratio = NULL, p_control = NULL,
-  p_treatment = NULL, power = NULL, conf_level = 0.95,
-  sample_ratio = 1, visualize = FALSE)
+chisq_test_odds(
+  odds_ratio = NULL,
+  p_control = NULL,
+  p_treatment = NULL,
+  power = NULL,
+  conf_level = 0.95,
+  sample_ratio = 1,
+  visualize = FALSE
+)
 }
 \arguments{
 \item{odds_ratio}{The expected odds ratio. That is, the ratio of the odds of
@@ -38,12 +44,14 @@ If all values were provided, returns a single sample size estimate.
 Calculates sample size for chi-squared test of independence
 given the odds ratio.
 }
-\details{
-The function only needs to know two of the following three:
-\code{odds_ratio}, \code{p_control}, and \code{p_treatment}. If given
-all three, it will check to make sure the odds ratio is correct. It
-will figure out the missing third value from the other two.
+\section{Details}{
+
+The function only needs to know two of the following three: \code{odds_ratio},
+\code{p_control}, and \code{p_treatment}. If given all three, it will check to make
+sure the odds ratio is correct. It will figure out the missing third value
+from the other two.
 }
+
 \section{References}{
 
 Wang, H., Chow, S.-C., & Li, G. (2002). On sample size calculation based on

@@ -1,3 +1,9 @@
+wmf 0.8.0
+=========
+* Factored out interleaving & exact binomial C++ code into the [ortiz](https://gerrit.wikimedia.org/r/plugins/gitiles/wikimedia/discovery/ortiz/) package
+* Updated DESCRIPTION
+* Fixed dependencies
+
 wmf 0.7.1
 =========
 * Updated for new sharded MariaDB replicas ([T212386](https://phabricator.wikimedia.org/T212386))

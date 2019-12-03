@@ -10,8 +10,13 @@
 \alias{mysql_disconnect}
 \title{Work with MySQL databases}
 \usage{
-mysql_connect(database, use_x1 = FALSE, default_file = NULL,
-  hostname = NULL, port = NULL)
+mysql_connect(
+  database,
+  use_x1 = FALSE,
+  default_file = NULL,
+  hostname = NULL,
+  port = NULL
+)
 
 mysql_read(query, database = NULL, use_x1 = NULL, con = NULL)
 
@@ -27,7 +32,7 @@ mysql_disconnect(con)
 \item{database}{name of the database to query; \emph{optional} if passing a \code{con}}
 
 \item{use_x1}{logical flag; use if querying an extension-related table that
-is hosted on x1 (e.g. \code{echo_*} tables); default \code{FALSE}}
+is hosted on x1 (e.g. \verb{echo_*} tables); default \code{FALSE}}
 
 \item{default_file}{name of a config file containing username and password
 to use when connecting}

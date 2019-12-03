@@ -5,7 +5,7 @@
 #'   Hive on WMF's analytics machine(s) loads some JARs by default, so if your
 #'   query uses an updated version of an existing UDF and you want to load the
 #'   JAR that you built yourself, set this to `TRUE`. See
-#'   [Testing changes to existing UDF](https://wikitech.wikimedia.org/wiki/Analytics/Systems/Cluster/Hive/QueryUsingUDF#Testing_changes_to_existing_udf)
+#'   [Testing changes to existing UDF](https://wikitech.wikimedia.org/wiki/Analytics/Systems/Cluster/Hive/QueryUsingUDF#Testing_changes_to_existing_udf) # nolint
 #'   for more details.
 #' @param heap_size `HADOOP_HEAPSIZE`; default is 1024 (alt: 2048 or 4096)
 #' @param use_nice Whether to use `nice` for less greedy CPU usage in a multi-user environment. The default is `TRUE`.
@@ -19,11 +19,13 @@
 #'   necessary, in the same way that it is for regular expressions.
 #' @return A `data.frame` containing the results of the query, or a `TRUE` if
 #'   the user has chosen to write straight to file.
+# nolint start
 #' @section Handling our hadoop/hive setup:
 #' The `webrequests` table is documented [on Wikitech](https://wikitech.wikimedia.org/wiki/Analytics/Systems/Cluster/Hive),
 #' which also provides [a set of example queries](https://wikitech.wikimedia.org/wiki/Analytics/Systems/Cluster/Hive/Queries). When it comes to manipulating the rows with Java before they get to you, Nuria has written a
 #' [brief tutorial on loading UDFs](https://wikitech.wikimedia.org/wiki/Analytics/Systems/Cluster/Hive/QueryUsingUDF)
 #' which should help if you want to engage in that.
+# nolint end
 #' @seealso [lubridate::ymd_hms()] for converting the "dt" column in the
 #'   webrequests table to proper datetime, and [mysql_read()] and
 #'   [global_query()] for querying our MySQL databases

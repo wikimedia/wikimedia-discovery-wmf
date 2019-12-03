@@ -4,8 +4,13 @@
 \alias{theme_facet}
 \title{Simple theme for facet-ed ggplots}
 \usage{
-theme_facet(base_size = 12, base_family = "", border = TRUE,
-  clean_xaxis = FALSE, ...)
+theme_facet(
+  base_size = 12,
+  base_family = "",
+  border = TRUE,
+  clean_xaxis = FALSE,
+  ...
+)
 }
 \arguments{
 \item{base_size}{font size}

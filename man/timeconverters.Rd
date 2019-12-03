@@ -29,5 +29,5 @@ from_mediawiki("20150101010301")
 \code{\link[lubridate:ymd_hms]{lubridate::ymd_hms()}}
 }
 \author{
-Oliver Keyes
+Os Keyes
 }

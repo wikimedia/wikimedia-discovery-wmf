@@ -5,7 +5,7 @@
 #' @rdname timeconverters
 #' @examples
 #' from_mediawiki("20150101010301")
-#' @author Oliver Keyes
+#' @author Os Keyes
 #' @seealso [lubridate::ymd_hms()]
 #' @export
 from_mediawiki <- function(x) {

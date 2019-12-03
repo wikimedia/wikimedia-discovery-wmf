@@ -14,9 +14,9 @@ parse_date <- function(date) {
 #'   `earliest` to the current date; in the event that both arguments are set,
 #'   the retrieved files will be those in that range.
 #' @return A vector of filenames that can be passed into [read_sampled_log()]
-#' @author Oliver Keyes
+#' @author Os Keyes
 #' @export
-get_logfile <- function(earliest = NULL, latest = NULL){
+get_logfile <- function(earliest = NULL, latest = NULL) {
   # Begin Exclude Linting
   files <- list.files("/a/squid/archive/sampled", full.names = TRUE, pattern = "gz$")
   # End Exclude Linting
@@ -57,9 +57,9 @@ get_logfile <- function(earliest = NULL, latest = NULL){
 #' - lang
 #' - x_analytics
 #' @importFrom urltools url_decode
-#' @author Oliver Keyes
+#' @author Os Keyes
 #' @export
-read_sampled_log <- function(file, transparent = FALSE, nrows = NULL){
+read_sampled_log <- function(file, transparent = FALSE, nrows = NULL) {
   is_gzipped <- grepl("gz$", file)
   if (is_gzipped) { # gzipped log file
     if (transparent) { # read the file in directly w/o gunzipping first

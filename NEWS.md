@@ -3,6 +3,7 @@ wmfdata 0.9.0
 
 * New name, to be more consistent the Python sibling [wmfdata](https://github.com/wikimedia/wmfdata-python).
 * Updated installation instructions.
+* Removed obsolete functions for refining legacy EventLogging data.
 
 wmf 0.8.1
 =========

@@ -1,6 +1,6 @@
 Package: wmfdata
 Type: Package
-Title: R Code for Wikimedia Foundation Internal Usage
+Title: R Tools For Wikimedia Foundation's Analysts And Data Scientists
 Version: 0.9.0
 Date: 2020-08-18
 Authors@R: c(
@@ -9,8 +9,8 @@ Authors@R: c(
     person("Chelsy", "Xie", role = "ctb", comment = "No longer employed at the Foundation"),
     person(family = "Wikimedia Foundation", role = "cph")
     )
-Description: This package contains functions made for Analysts at Wikimedia
-    Foundation, but can be used by people outside of the Foundation.
+Description: This package contains functions made for Analysts and Scientists at
+    the Wikimedia Foundation.
 License: MIT + file LICENSE
 URL: https://gerrit.wikimedia.org/r/plugins/gitiles/wikimedia/discovery/wmf/
 BugReports: https://phabricator.wikimedia.org/maniphest/task/create/?projects=Product-Analytics&assigned=mpopov

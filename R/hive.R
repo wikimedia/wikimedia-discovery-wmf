@@ -79,27 +79,3 @@ query_hive <- function(query, heap_size = 1024,
   stop_on_empty(results)
   return(results)
 }
-
-#' @title Generate a Date Clause for a Hive query
-#' @description What it says on the tin; generates a
-#'   `WHERE year = foo AND month = bar`
-#'   that can then be combined with other elements to form a Hive query.
-#' @param date if `NULL`, yesterday will be used
-#' @return a list containing two elements: "date_clause" and "date"; the
-#'   returning of the date allows you to include it
-#' @seealso [extract_ymd()]
-#' @export
-date_clause <- function(date) {
-  warning("Deprecated; recommended to use `c(year, month, day) %<-% wmf::extract_ymd(date)` instead")
-  if (is.null(date)) {
-    date <- Sys.Date() - 1
-  }
-  fragment <- sprintf(
-    "WHERE year = %s AND month = %s AND day = %s ",
-    lubridate::year(date),
-    lubridate::month(date),
-    lubridate::mday(date)
-  )
-  output <- list(date_clause = fragment, date = date)
-  return(output)
-}

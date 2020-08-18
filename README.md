@@ -1,4 +1,4 @@
-# R Tools for Wikimedia Foundation's Analysts
+# wmfdata: R tools for Wikimedia Foundation's Analysts & Data Scientists
 
 **NOTICE**: while this package is installed from GitHub ([wikimedia/wmfdata-r](https://github.com/wikimedia/wmfdata-r)), that repository is a read-only mirror of [wikimedia/discovery/wmf](https://gerrit.wikimedia.org/g/wikimedia/discovery/wmf) repository hosted on [Gerrit](https://www.mediawiki.org/wiki/Gerrit). See [mediawiki:Developer account](https://www.mediawiki.org/wiki/Developer_account) for information about creating a Wikimedia Developer account for contributing to this package, MediaWiki, and other Wikimedia projects.
 

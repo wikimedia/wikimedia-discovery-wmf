@@ -1,15 +1,3 @@
-# nolint start
-oddsRatio <- function(p_treatment, p_control) {
-  return((p_treatment / (1 - p_treatment)) / (p_control / (1 - p_control)))
-}
-pTreatment <- function(p_control, odds_ratio) {
-  return((odds_ratio * p_control) / ((p_control * (odds_ratio - 1)) + 1))
-}
-pControl <- function(p_treatment, odds_ratio) {
-  return(1 / ((odds_ratio * ((1 / p_treatment) - 1)) + 1))
-}
-# nolint end
-
 #' @title Chi-square Test Sample Size Given Odds Ratio
 #' @description Calculates sample size for chi-squared test of independence
 #'   given the odds ratio.
@@ -69,6 +57,19 @@ chisq_test_odds <- function(
   if (power_missing) {
     power <- seq(0.5, 0.99, 0.01)
   }
+
+  # nolint start
+  oddsRatio <- function(p_treatment, p_control) {
+    return((p_treatment / (1 - p_treatment)) / (p_control / (1 - p_control)))
+  }
+  pTreatment <- function(p_control, odds_ratio) {
+    return((odds_ratio * p_control) / ((p_control * (odds_ratio - 1)) + 1))
+  }
+  pControl <- function(p_treatment, odds_ratio) {
+    return(1 / ((odds_ratio * ((1 / p_treatment) - 1)) + 1))
+  }
+  # nolint end
+
   # Imputations (Part 2)
   if (prob_control_missing) {
     p_control <- pControl(p_treatment, odds_ratio)

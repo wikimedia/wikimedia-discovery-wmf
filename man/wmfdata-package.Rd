@@ -4,10 +4,10 @@
 \name{wmfdata-package}
 \alias{wmfdata}
 \alias{wmfdata-package}
-\title{wmfdata: R Code for Wikimedia Foundation Internal Usage}
+\title{wmfdata: R Tools For Wikimedia Foundation's Analysts And Data Scientists}
 \description{
-This package contains functions made for Analysts at Wikimedia
-    Foundation, but can be used by people outside of the Foundation.
+This package contains functions made for Analysts and Scientists at
+    the Wikimedia Foundation.
 }
 \seealso{
 Useful links:

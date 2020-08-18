@@ -13,7 +13,7 @@ pretty_num(x, ...)
 \arguments{
 \item{x}{A vector to format}
 
-\item{...}{Additional parameters to pass to \code{\link[base:prettyNum]{base::prettyNum()}}}
+\item{...}{Additional parameters to pass to \code{\link[base:formatc]{base::prettyNum()}}}
 }
 \description{
 Formatting utilities

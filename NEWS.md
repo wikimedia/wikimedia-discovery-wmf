@@ -1,6 +1,16 @@
+wmfdata 0.9.0
+=============
+
+* New name, to be more consistent the Python sibling [wmfdata](https://github.com/wikimedia/wmfdata-python).
+* Updated installation instructions.
+
+wmf 0.8.1
+=========
+* Added `debug` mode to `query_hive()` which prints useful information and does not auto-delete the temporary query and results files.
+
 wmf 0.8.0
 =========
-* Factored out interleaving & exact binomial C++ code into the [ortiz](https://gerrit.wikimedia.org/r/plugins/gitiles/wikimedia/discovery/ortiz/) package
+* Factored out interleaving & exact binomial C++ code into the [ortiz](https://gerrit.wikimedia.org/g/wikimedia/discovery/ortiz/) package
 * Updated DESCRIPTION
 * Fixed dependencies
 

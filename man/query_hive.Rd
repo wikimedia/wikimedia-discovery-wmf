@@ -6,22 +6,15 @@
 \usage{
 query_hive(
   query,
-  override_jars = FALSE,
   heap_size = 1024,
   use_nice = TRUE,
   use_ionice = TRUE,
-  use_beeline = FALSE
+  use_beeline = FALSE,
+  debug = FALSE
 )
 }
 \arguments{
 \item{query}{a Hive query}
-
-\item{override_jars}{A logical flag indicating whether to override the path.
-Hive on WMF's analytics machine(s) loads some JARs by default, so if your
-query uses an updated version of an existing UDF and you want to load the
-JAR that you built yourself, set this to \code{TRUE}. See
-\href{https://wikitech.wikimedia.org/wiki/Analytics/Systems/Cluster/Hive/QueryUsingUDF#Testing_changes_to_existing_udf}{Testing changes to existing UDF} # nolint
-for more details.}
 
 \item{heap_size}{\code{HADOOP_HEAPSIZE}; default is 1024 (alt: 2048 or 4096)}
 
@@ -30,6 +23,8 @@ for more details.}
 \item{use_ionice}{Whether to use \code{ionice} for less greedy I/O in a multi-user environment. The default is \code{TRUE}.}
 
 \item{use_beeline}{Whether to use \code{beeline} to connect with Hive instead of \code{hive}. The default is \code{FALSE}.}
+
+\item{debug}{Whether to print the query and any messages/info which could be useful for debugging.}
 }
 \value{
 A \code{data.frame} containing the results of the query, or a \code{TRUE} if

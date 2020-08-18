@@ -1,4 +1,4 @@
 library(testthat)
-library(wmf)
+library(wmfdata)
 
-test_check("wmf")
+test_check("wmfdata")

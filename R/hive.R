@@ -1,16 +1,11 @@
 #' @title Query Hadoop cluster with Hive
 #' @description Queries Hive
 #' @param query a Hive query
-#' @param override_jars A logical flag indicating whether to override the path.
-#'   Hive on WMF's analytics machine(s) loads some JARs by default, so if your
-#'   query uses an updated version of an existing UDF and you want to load the
-#'   JAR that you built yourself, set this to `TRUE`. See
-#'   [Testing changes to existing UDF](https://wikitech.wikimedia.org/wiki/Analytics/Systems/Cluster/Hive/QueryUsingUDF#Testing_changes_to_existing_udf) # nolint
-#'   for more details.
 #' @param heap_size `HADOOP_HEAPSIZE`; default is 1024 (alt: 2048 or 4096)
 #' @param use_nice Whether to use `nice` for less greedy CPU usage in a multi-user environment. The default is `TRUE`.
 #' @param use_ionice Whether to use `ionice` for less greedy I/O in a multi-user environment. The default is `TRUE`.
 #' @param use_beeline Whether to use `beeline` to connect with Hive instead of `hive`. The default is `FALSE`.
+#' @param debug Whether to print the query and any messages/info which could be useful for debugging.
 #' @section Escaping:
 #' `hive_query` works by running the query you provide through the CLI via a
 #'   [system()] call. As a result, single escapes for meaningful characters
@@ -34,37 +29,55 @@
 #' query_hive("USE wmf; DESCRIBE webrequest;")
 #' }
 #' @export
-query_hive <- function(query, override_jars = FALSE, heap_size = 1024,
-                       use_nice = TRUE, use_ionice = TRUE, use_beeline = FALSE) {
+query_hive <- function(query, heap_size = 1024,
+                       use_nice = TRUE, use_ionice = TRUE, use_beeline = FALSE,
+                       debug = FALSE) {
 
-    # Write query out to tempfile and create tempfile for results.
-    query_dump <- tempfile()
-    cat(query, file = query_dump)
-    results_dump <- tempfile()
+  message("Don't forget to authenticate with Kerberos using kinit")
 
-    filters <- paste0(
-      c("", paste("grep -v", c("JAVA_TOOL_OPTIONS", "parquet.hadoop", "WARN:", ":WARN"))),
-      collapse = " | "
-    )
+  # Write query out to tempfile and create tempfile for results.
+  query_dump <- fs::file_temp(pattern = "temp_query", tmp_dir = ".", ext = ".hql")
+  cat(query, file = query_dump)
+  results_dump <- fs::file_temp(pattern = "temp_results", tmp_dir = ".", ext = ".tsv")
 
-    # Query and read in the results
-    try({
-      system(paste0(
-        "export HADOOP_HEAPSIZE=", heap_size, " && ",
-        ifelse(use_nice, "nice ", ""),
-        ifelse(use_ionice, "ionice ", ""),
-        ifelse(use_beeline, " beeline --silent=true ", "hive -S "),
-        ifelse(override_jars, "--hiveconf hive.aux.jars.path= ", ""),
-        "-f ", query_dump, " 2> /dev/null", filters, " > ", results_dump
-      ))
-      results <- utils::read.delim(results_dump, sep = "\t", quote = "", as.is = TRUE, header = TRUE)
-    })
+  if (debug) {
+    message("Query written to: ", query_dump)
+    message("Results will be written to: ", results_dump)
+  }
 
-    # Clean up and return
+  cli <- dplyr::case_when(
+    use_beeline && debug ~ "beeline",
+    use_beeline && ~debug ~ "beeline --silent=true",
+    !use_beeline && debug ~ "hive",
+    !use_beeline && !debug ~ "hive -S"
+  )
+  if (use_nice) cli <- paste("nice", cli)
+  if (use_ionice) cli <- paste("ionice", cli)
+
+  # Query and read in the results
+  cmd <- "export HADOOP_HEAPSIZE={heap_size} && {cli} -f {query_dump} 2>&1"
+  cmd <- paste(cmd, "> {results_dump}")
+  cmd <- glue::glue(cmd)
+  if (debug) message("Command to run: ", cmd)
+
+  std_err <- system(cmd, intern = TRUE)
+  if (debug) message("stderr:\n\t", std_err)
+  if (fs::file_exists(results_dump)) {
+    results <- utils::read.delim(results_dump, sep = "\t", quote = "", as.is = TRUE, header = TRUE)
+    if (debug) message("First few rows of read-in results:\n", head(results))
+  } else {
+    stop("The file '", results_dump, "' does not exist")
+  }
+
+  # Clean up and return
+  if (debug) {
+    message("Query and results files were not automatically deleted to allow for inspection.")
+    message(glue::glue("Do not forget to clean up using:\nrm {query_dump}\nrm {results_dump}"))
+  } else {
     file.remove(query_dump, results_dump)
-    stop_on_empty(results)
-    return(results)
-
+  }
+  stop_on_empty(results)
+  return(results)
 }
 
 #' @title Generate a Date Clause for a Hive query

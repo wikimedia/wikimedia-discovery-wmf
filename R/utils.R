@@ -22,18 +22,6 @@ null2na <- function(x) {
   }))
 }
 
-#' @title Parse character vector of JSON
-#' @description This is a shortcut for using [purrr::map()] with
-#'   [jsonlite::fromJSON()]. Useful when a column in a `data.frame` has JSON.
-#'   **Note**: if the intention is to have the parsed data in a column such as
-#'   when parsing in [dplyr::mutate()], it is *highly* recommended to switch
-#'   to a `tibble` via [tibble::as_tibble()] *first*.
-#' @param x A character vector of JSON
-#' @export
-parse_json <- function(x) {
-  return(purrr::map(x, jsonlite::fromJSON))
-}
-
 #' @title Invert list
 #' @description Inverts a (named) list such that the values become the keys and
 #'   the keys become the values.

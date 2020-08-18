@@ -1,8 +1,8 @@
 Package: wmf
 Type: Package
 Title: R Code for Wikimedia Foundation Internal Usage
-Version: 0.8.0
-Date: 2019-12-03
+Version: 0.8.2
+Date: 2020-08-18
 Authors@R: c(
     person("Mikhail", "Popov", email = "mikhail@wikimedia.org", role = c("aut", "cre")),
     person("Os", "Keyes", role = "aut", comment = "No longer employed at the Foundation"),
@@ -16,6 +16,9 @@ URL: https://gerrit.wikimedia.org/r/plugins/gitiles/wikimedia/discovery/wmf/
 BugReports: https://phabricator.wikimedia.org/maniphest/task/create/?projects=Product-Analytics&assigned=mpopov
 Depends: R (>= 3.1.0)
 Imports:
+    dplyr,
+    fs,
+    glue,
     ggthemes (>= 3.4.0),
     ggplot2,
     jsonlite,
@@ -30,13 +33,11 @@ Imports:
     magrittr,
     zeallot
 Suggests:
-    dplyr,
     knitr,
     lintr (>= 2.0.0),
     roxygen2 (>= 7.0.0),
-    testthat,
-    tidyr
+    testthat
 LazyData: TRUE
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1

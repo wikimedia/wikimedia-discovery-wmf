@@ -15,10 +15,6 @@
 - Sample size calculations:
     - `chisq_test_odds` estimates sample size for a chi-squared test given an odds ratio
     - `chisq_test_effect` estimates sample size for a chi-squared test given Cohen's *w*
-- Functions for estimating preference of ranking functions using clicks on interleaved search results:
-    - `interleaved_preference` estimates preference; see vignette for details
-    - `interleaved_bootstraps` resamples sessions with replacement to yield bootstrapped sample of preferences
-    - `interleaved_confint` uses `interleaved_bootstraps` and `stats::quantile` to yield a bootstrapped confidence interval
 
 Also includes [Wikimedia Design visual style colors](https://design.wikimedia.org/style-guide/visual-style_colors.html):
 
@@ -28,14 +24,8 @@ Also includes [Wikimedia Design visual style colors](https://design.wikimedia.or
 
 ```R
 # install.packages("remotes", repos = c(CRAN = "https://cran.rstudio.com/"))
-
-remotes::install_git("https://gerrit.wikimedia.org/r/wikimedia/discovery/wmf")
-
-# Alternatively, you can install from GitHub mirror:
-remotes::install_github("wikimedia/wikimedia-discovery-wmf")
+remotes::install_github("wikimedia/wmfdata-r")
 ```
-
-To update: `remotes::update_packages("wmf")`
 
 ## Maintainers
 
@@ -44,3 +34,7 @@ To update: `remotes::update_packages("wmf")`
 ## Additional Information
 
 Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
+
+Working in Python? Check out [wmfdata](https://github.com/wikimedia/wmfdata-python) tools for working with Wikimedia data on the [analytics clients](https://wikitech.wikimedia.org/wiki/Analytics/Systems/Clients).
+
+

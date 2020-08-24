@@ -46,7 +46,7 @@ update_shardmap <- function(dev = FALSE) {
   if (dev) {
     file_path <- "inst/extdata/sections_by_db.csv"
   } else {
-    file_path <- system.file("extdata", "sections_by_db.csv", package = "wmf")
+    file_path <- system.file("extdata", "sections_by_db.csv", package = "wmfdata")
   }
   message("saving sectionsByDB to ", file_path)
   write.csv(sections_by_db, file_path)
@@ -69,7 +69,7 @@ connection_details <- function(dbname, use_x1 = FALSE) {
   #   Example: s5 will be accessible to s5-analytics-replica.eqiad.wmnet:3315
   # 3320 for x1. Example: x1-analytics-replica.eqiad.wmnet:3320
   # 3350 for staging
-  shardmap <- system.file("extdata", "sections_by_db.csv", package = "wmf")
+  shardmap <- system.file("extdata", "sections_by_db.csv", package = "wmfdata")
   if (file.exists(shardmap)) {
     sections_by_db <- read.csv(shardmap)
   } else {

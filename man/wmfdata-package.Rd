@@ -12,8 +12,8 @@ This package contains functions made for Analysts and Scientists at
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://gerrit.wikimedia.org/r/plugins/gitiles/wikimedia/discovery/wmf/}
-  \item Report bugs at \url{https://phabricator.wikimedia.org/maniphest/task/create/?projects=Product-Analytics&assigned=mpopov}
+  \item \url{https://gerrit.wikimedia.org/g/wikimedia/discovery/wmf/}
+  \item Report bugs at \url{https://phabricator.wikimedia.org/maniphest/task/create/?projects=Product-Analytics&assigned=mpopov&title=wmfdata-r}
 }
 
 }

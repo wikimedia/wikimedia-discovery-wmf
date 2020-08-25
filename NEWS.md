@@ -1,3 +1,8 @@
+wmfdata 0.9.1
+=============
+
+* Hotfix for querying MariaDB replicas [T261165](https://phabricator.wikimedia.org/T261165) (Thanks, Morten!)
+
 wmfdata 0.9.0
 =============
 

@@ -49,7 +49,7 @@ update_shardmap <- function(dev = FALSE) {
     file_path <- system.file("extdata", "sections_by_db.csv", package = "wmfdata")
   }
   message("saving sectionsByDB to ", file_path)
-  write.csv(sections_by_db, file_path)
+  readr::write_csv(sections_by_db, file_path)
   # End Exclude Linting
 }
 
@@ -71,7 +71,7 @@ connection_details <- function(dbname, use_x1 = FALSE) {
   # 3350 for staging
   shardmap <- system.file("extdata", "sections_by_db.csv", package = "wmfdata")
   if (file.exists(shardmap)) {
-    sections_by_db <- read.csv(shardmap)
+    sections_by_db <- readr::read_csv(shardmap, col_types = "ci")
   } else {
     stop("no shard map found; use update_shardmap() to download latest shard mapping")
   }
